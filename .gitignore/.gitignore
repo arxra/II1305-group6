@@ -1,8 +1,8 @@
-[L]ibrary/
-[T]emp/
-[O]bj/
-[B]uild/
-[B]uilds/
+Library/
+Temp/
+Obj/
+Build/
+Builds/
 Assets/AssetStoreTools*
 *.log
 
