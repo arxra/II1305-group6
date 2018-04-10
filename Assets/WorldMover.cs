@@ -11,6 +11,8 @@ public class WorldMover : MonoBehaviour {
 
 	public float MaxSpeed = 16f;
 
+	public GameObject RoadToBeEndless;
+
 	// Use this for initialization
 	void Start () {
 		targets = new List<GameObject>(GameObject.FindGameObjectsWithTag(TAG));
@@ -20,6 +22,9 @@ public class WorldMover : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+		// Moving objects
+		// ##############
+
 		foreach(GameObject target in targets) {
 			Rigidbody body = target.GetComponent<Rigidbody>();
 
@@ -27,13 +32,12 @@ public class WorldMover : MonoBehaviour {
 				body.AddForce(MovementDirection);
 		}
 
-		foreach(GameObject target in targets) {
-			if (target.name.Equals("Road")){
-				Transform transf = target.GetComponent<Transform>();
-			
-				if (transf.position.magnitude > 10)
-					transf.SetPositionAndRotation(Vector3.zero, transf.rotation);
-			}
-		}
+		// Endless road
+		// ############
+
+		Transform transf = RoadToBeEndless.GetComponent<Transform>();
+	
+		if (transf.position.magnitude > 10)
+			transf.SetPositionAndRotation(Vector3.zero, transf.rotation);		
 	}
 }

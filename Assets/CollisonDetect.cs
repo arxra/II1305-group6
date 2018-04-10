@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CollisonDetect : MonoBehaviour {
+
+    public GameObject Player;
 
 	// Use this for initialization
 	void Start () {
@@ -10,9 +13,9 @@ public class CollisonDetect : MonoBehaviour {
 	}
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "player")
+        if (col.gameObject.Equals(Player))
         {
-            Debug.Break();
+            SceneManager.LoadScene( SceneManager.GetActiveScene().name );
         }
     }
 
