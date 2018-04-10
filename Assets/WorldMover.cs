@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class WorldMover : MonoBehaviour {
 
-	public const string TAG = "Moving"; 
-
-	private List<GameObject> targets; 
+	[Tooltip("Gameobjects with this tag will be moved by this script")]
+	public string AffectedTag; 
+	
+	[Tooltip("A normalized directional vector pointing in the direction that the world should move")]
 	public Vector3 MovementDirection;
 
-	public float MaxSpeed = 16f;
+	[Tooltip("The magnitude of the movement")]
+	public float Magnitude;
 
-	public GameObject RoadToBeEndless;
+	[Tooltip("Limits the maximum speed of the world")]
+	public float MaxSpeed;
+
+
+	private List<GameObject> targets; 
 
 	// Use this for initialization
 	void Start () {
-		targets = new List<GameObject>(GameObject.FindGameObjectsWithTag(TAG));
-		MovementDirection = new Vector3(0f, 0f, -100f);
+		targets = new List<GameObject>(GameObject.FindGameObjectsWithTag(AffectedTag));
 	}
 	
 	// Update is called once per frame
@@ -26,16 +31,16 @@ public class WorldMover : MonoBehaviour {
 		// ##############
 
 		foreach(GameObject target in targets) {
-			Rigidbody body = target.GetComponent<Rigidbody>();
+			Rigidbody body = target.GetComponent<Rigidbody>();			
 
 			if (body.velocity.magnitude < MaxSpeed)
-				body.AddForce(MovementDirection);
+				body.AddForce(MovementDirection * Magnitude);
 		}
 
 		// Endless road
 		// ############
 
-		Transform transf = RoadToBeEndless.GetComponent<Transform>();
+		Transform transf = this.gameObject.GetComponent<Transform>();
 	
 		if (transf.position.magnitude > 10)
 			transf.SetPositionAndRotation(Vector3.zero, transf.rotation);		
