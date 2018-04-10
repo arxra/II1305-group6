@@ -15,7 +15,7 @@ public class CollisonDetect : MonoBehaviour {
     {
         if (col.gameObject.Equals(Player))
         {
-            SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+            SceneManager.LoadScene(1);
         }
     }
 
