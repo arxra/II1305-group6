@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: d79e15fdcf72048d4816934fc3208c04, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: bc819ed4b06754e4db83b4ed28dc4b58, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.06839491, g: 0.07500739, b: 0.12201119, a: 1}
+  m_IndirectSpecularColor: {r: 0.065771304, g: 0.0727698, b: 0.118871294, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1121,6 +1121,7 @@ GameObject:
   - component: {fileID: 750100556}
   - component: {fileID: 750100555}
   - component: {fileID: 750100559}
+  - component: {fileID: 750100560}
   m_Layer: 0
   m_Name: Brick
   m_TagString: Obstacle
@@ -1190,7 +1191,8 @@ Transform:
   m_LocalRotation: {x: 0.66446304, y: 0.24184473, z: -0.24184473, w: 0.66446304}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1394598534}
   m_Father: {fileID: 815724817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 40, z: 0}
@@ -1329,13 +1331,6 @@ MeshRenderer:
   m_SortingOrder: 0
 --- !u!33 &855563313
 MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 855563307}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &939964789
-GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -1753,7 +1748,6 @@ GameObject:
   - component: {fileID: 1627981544}
   - component: {fileID: 1627981543}
   - component: {fileID: 1627981545}
-  - component: {fileID: 1627981546}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1988,7 +1982,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 28625892}
-  - {fileID: 1768911904}
   - {fileID: 2136734656}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -2256,7 +2249,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1925668429}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
