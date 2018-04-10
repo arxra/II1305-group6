@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8a5c0c9fd751b8a4093567669757f34b
-timeCreated: 1523350989
+guid: 5593715ddbc614747af3fa4110f4900d
+timeCreated: 1523369568
 licenseType: Free
 TrueTypeFontImporter:
   externalObjects: {}
@@ -10,9 +10,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Japanese 3017
+  fontName: Electroharmonix
   fontNames:
-  - Japanese 3017
+  - Electroharmonix
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
