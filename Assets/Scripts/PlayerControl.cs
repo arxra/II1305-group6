@@ -28,6 +28,7 @@ public class PlayerControl : MonoBehaviour {
     private bool isGrounded;
     private float timeout;
 
+	private int maxLanechanges;
 
 
     // Use this for initialization
@@ -37,6 +38,7 @@ public class PlayerControl : MonoBehaviour {
 
         rb = this.gameObject.GetComponent<Rigidbody>();
         transf  = this.gameObject.GetComponent<Transform>();
+		maxLanechanges = 0; // -1 = left, 0 = center, 1 = right
     }
 
     void FixedUpdate()
@@ -67,8 +69,14 @@ public class PlayerControl : MonoBehaviour {
         float xMovement = rb.mass * MovementMagnitudeFactor;
         bool left = Input.GetKeyDown(KeyCode.LeftArrow); 
 
-        if (left || Input.GetKeyDown(KeyCode.RightArrow)){
-            rb.AddForce(xMovement * (left ? -1 : 1), 0, 0, ForceMode.Impulse);
+		if ((left && maxLanechanges > -1) || (Input.GetKeyDown(KeyCode.RightArrow) && maxLanechanges < 1)){
+			if (left) {
+				maxLanechanges--;
+			}
+			else {
+				maxLanechanges++;
+			}
+			rb.AddForce(xMovement * (left ? -1 : 1), 0, 0, ForceMode.Impulse);
             rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
             timeout = TimeToReachMiddle;
         }
