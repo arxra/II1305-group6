@@ -8,22 +8,20 @@ public class GameOverScreen : MonoBehaviour
 {
     GameObject[] gameoverObjects;
     private GameObject[] Obstical;
-    private GameObject parent;
+    
     
     void Start()
     {
-        Obstical = GameObject.FindGameObjectsWithTag("obstacle");
-        foreach (GameObject foundOne in Obstical)
-        {
-             parent = foundOne.transform.parent.gameObject;
-        }
+       
         Time.timeScale = 1;
         gameoverObjects = GameObject.FindGameObjectsWithTag("ShowOnGameOver");
         hideGameOver();
     }
+   
+    
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.Equals(parent))
+        if (col.gameObject.tag=="Obstacle")
         {
             Time.timeScale = 0;
             showGameOver();

@@ -8,6 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MainGame.unity
     guid: 7cbe74717e23c4853bbe7a37be2413d1
-  - enabled: 1
-    path: Assets/Game over.unity
-    guid: e10b6cfbb17989440980b62708e7aa53
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000

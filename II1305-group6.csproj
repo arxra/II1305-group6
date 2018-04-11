@@ -235,12 +235,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CollisonDetect.cs" />
-    <Compile Include="Assets\GameOverScreen.cs" />
-    <Compile Include="Assets\Manager.cs" />
-    <Compile Include="Assets\PlayerControl.cs" />
-    <Compile Include="Assets\PlayerRolling.cs" />
-    <Compile Include="Assets\WorldMover.cs" />
+    <Compile Include="Assets\Scripts\CollisonDetect.cs" />
+    <Compile Include="Assets\Scripts\GameOverScreen.cs" />
+    <Compile Include="Assets\Scripts\Manager.cs" />
+    <Compile Include="Assets\Scripts\ObstacleCreator.cs" />
+    <Compile Include="Assets\Scripts\ObstacleRemover.cs" />
+    <Compile Include="Assets\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\PlayerRolling.cs" />
+    <Compile Include="Assets\Scripts\WorldMover.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Fonts\license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
