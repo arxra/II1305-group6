@@ -7,6 +7,8 @@ TagManager:
   - Moving
   - ShowOnGameOver
   - obstacle
+  - Obstacle
+  - Pause
   layers:
   - Default
   - TransparentFX
