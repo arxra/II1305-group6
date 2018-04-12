@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour {
@@ -23,7 +21,7 @@ public class Score : MonoBehaviour {
     int multiplier = 1; // Change this one later to get it's variable from the multiplier
     float scoreUpdate = 0;
     if(Time.timeScale == 1)
-      scoreUpdate += GameObject.Find("Road").GetComponent<WorldMover>().Magnitude/700;
+      scoreUpdate += Time.deltaTime * GameObject.Find("Road").GetComponent<WorldMover>().currentSpeed;
 
     score += Mathf.RoundToInt(scoreUpdate * multiplier);
         updateText();
