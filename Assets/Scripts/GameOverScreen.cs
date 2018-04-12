@@ -10,7 +10,7 @@ public class GameOverScreen : MonoBehaviour
     GameObject[] gameoverObjects;
     private GameObject[] Obstical;
     GameObject[] pauseObjects;
-    private bool alive;
+    public bool alive = true;
     
     
     void Start()
