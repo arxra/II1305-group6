@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: bc819ed4b06754e4db83b4ed28dc4b58, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 358e944890c8b4ae9baace82b653e2a6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.065771304, g: 0.0727698, b: 0.118871294, a: 1}
+  m_IndirectSpecularColor: {r: 0.06599261, g: 0.07277446, b: 0.11851183, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2613,6 +2613,7 @@ GameObject:
   - component: {fileID: 1627981545}
   - component: {fileID: 1627981546}
   - component: {fileID: 1627981547}
+  - component: {fileID: 1627981543}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2634,6 +2635,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1627981543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1627981541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb9ae853d4e9485488a472f6439cec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  text: {fileID: 0}
+  go: {fileID: 0}
+  alive: 0
 --- !u!135 &1627981544
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2675,6 +2691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4390bf1c09a86f54fb304c5d8892a6a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alive: 1
 --- !u!65 &1627981547
 BoxCollider:
   m_ObjectHideFlags: 0
