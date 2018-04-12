@@ -8,15 +8,15 @@ public class Score : MonoBehaviour {
     public int score;
 
   //Read the speed from the WorldMover script to calclate the points.
-  private WorldMover mv; 
+  private WorldMover mv = null; 
   // Use this for initialization
   void Start () {
-mv : WorldMover = GetComponent(WorldMover);
     score = 0;
   }
 
   // Update is called once per frame
   void Update () {
-    score += WorldMover.Magnitude/100;
+    if(Time.timeScale == 1)
+      score += Mathf.RoundToInt(GameObject.Find("Road").GetComponent<WorldMover>().Magnitude/1000);
   }
 }
