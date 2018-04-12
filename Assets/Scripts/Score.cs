@@ -16,7 +16,11 @@ public class Score : MonoBehaviour {
 
   // Update is called once per frame
   void Update () {
+    int multiplier = 1; // Change this one later to get it's variable from the multiplier
+    int scoreUpdate = 0;
     if(Time.timeScale == 1)
-      score += Mathf.RoundToInt(GameObject.Find("Road").GetComponent<WorldMover>().Magnitude/1000);
+      scoreUpdate += Mathf.RoundToInt(GameObject.Find("Road").GetComponent<WorldMover>().Magnitude/1000);
+
+    score += scoreUpdate * multiplier;
   }
 }
