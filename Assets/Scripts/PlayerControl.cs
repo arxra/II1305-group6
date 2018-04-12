@@ -10,10 +10,7 @@ public class PlayerControl : MonoBehaviour {
     public GameObject LaneOriginPoints;
 
     [Tooltip("A distance close enough to consider for locking the player into a lane")]
-    public float CloseEnoughToLaneDistance = 1f;
-
-    [Tooltip("A time that gives the player a chance to move instead locking him into the previous lane")]
-    public float TimeToReachMiddle = 0.2f;
+    public float CloseEnoughToLaneDistance;
 
     [Tooltip("Movement magnitude factor")]
     public float MovementMagnitudeFactor;
@@ -21,75 +18,132 @@ public class PlayerControl : MonoBehaviour {
     [Tooltip("Jump magnitude factor")]
     public float JumpMagnitudeFactor;
 
-    private bool jump;
+    [Tooltip("Gravity magnitude factor")]
+    public float GravityMagnitudeFactor;
+
+    [Tooltip("The clockwise angle that the player will be sliding in")]
+    public float SlidingAngle;
+
+    [Tooltip("The number of seconds that each sliding occurs")]
+    public float SlideTime;
+
     private Transform transf;
-    private Rigidbody rb;
-
     private bool isGrounded;
-    private float timeout;
-
-	private int maxLanechanges;
-
+    private float laneLockingTimeout;
+    private int currentLane;
+    private Vector3 laneMovementDirection;
+    private bool isSliding;
+    private float slidingTimer;
+    private bool slideFromAir;
+    private float verticalVelocity;
 
     // Use this for initialization
 
-    void Start()
-    {
-
-        rb = this.gameObject.GetComponent<Rigidbody>();
+    void Start(){
         transf  = this.gameObject.GetComponent<Transform>();
-		maxLanechanges = 0; // -1 = left, 0 = center, 1 = right
-    }
-
-    void FixedUpdate()
-
-    {
-
-        if (jump)
-        {
-
-            jump = false;
-            rb.AddForce(0, rb.mass * JumpMagnitudeFactor, 0, ForceMode.Impulse);
-        }
-    }
-    void OnCollisionEnter()
-    {
-
-        isGrounded = true;
-
+        laneMovementDirection = Vector3.zero;
+        currentLane = 1;
+        slideFromAir = false;
     }
 
     // Update is called once per frame
     void Update () {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded){
-            jump = true;
-            isGrounded = false;
-        }
+        isGrounded = Physics.Raycast(new Ray(transf.position, Vector3.down), this.gameObject.GetComponent<BoxCollider>().size.y / 2 - 0.5f);
 
-        float xMovement = rb.mass * MovementMagnitudeFactor;
-        bool left = Input.GetKeyDown(KeyCode.LeftArrow); 
-
-		if ((left && maxLanechanges > -1) || (Input.GetKeyDown(KeyCode.RightArrow) && maxLanechanges < 1)){
-			if (left) {
-				maxLanechanges--;
-			}
-			else {
-				maxLanechanges++;
-			}
-			rb.AddForce(xMovement * (left ? -1 : 1), 0, 0, ForceMode.Impulse);
-            rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
-            timeout = TimeToReachMiddle;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            moveToLane(currentLane - 1);
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+            moveToLane(currentLane + 1);
+        
+        if (laneMovementDirection != Vector3.zero) {
+            // The following deals with the x-dimension:
+            float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
+            float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transf.position.x);
+            
+            transf.position += laneMovementDirection * speed * Time.deltaTime;
         }
-        else if (timeout <= 0){
+        else if (laneLockingTimeout <= 0) {
             foreach(Transform laneTransf in LaneOriginPoints.transform) {
-                if (Mathf.Abs(transf.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
+                if (laneLockingTimeout <= 0 && Mathf.Abs(transf.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
                     transf.position = new Vector3(laneTransf.position.x, transf.position.y, transf.position.z);
-                    rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
+                    laneMovementDirection = Vector3.zero;
                 }
             }
         }
-        else {
-            timeout -= Time.deltaTime;
+    
+
+        bool pressingDown = Input.GetKeyDown(KeyCode.DownArrow);   
+
+        // Jumping & gravity calculation
+        // #############################
+        
+
+        if (isGrounded){
+            // On the ground:
+            
+            if (Input.GetKeyDown(KeyCode.Space)){
+                verticalVelocity = JumpMagnitudeFactor;
+                slidingTimer = 0f;
+                slideFromAir = false;
+            }
+            else{
+                if (pressingDown || slideFromAir){
+                    slidingTimer = SlideTime;
+                    slideFromAir = false;
+                }
+
+                verticalVelocity = Mathf.Max(0, verticalVelocity);    
+            }
         }
+        else {
+            // In the air:
+
+            if(pressingDown) {
+                verticalVelocity = -JumpMagnitudeFactor;
+                slideFromAir = true;
+            }
+            else
+                verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
+        }
+
+
+        transf.Rotate(getSlidingAngleDelta(), 0f, 0f);
+        transf.position += Vector3.up * verticalVelocity * Time.deltaTime;
+
+        laneLockingTimeout -= Time.deltaTime;
+        slidingTimer -= Time.deltaTime;
 	}
+
+    public float getSlidingAngleDelta() {
+        float currentClockwiseAngle = transf.eulerAngles.x;
+        float a = 0, b = 0;
+
+        if (slidingTimer > 0f) {
+            a = (SlidingAngle - currentClockwiseAngle) * Time.deltaTime;
+            b = (SlidingAngle - currentClockwiseAngle - 360) * Time.deltaTime;
+            isSliding = true; 
+        }
+        else if (isSliding) {
+            a = -currentClockwiseAngle;
+            b = 360 - currentClockwiseAngle;
+            isSliding = Mathf.Abs(currentClockwiseAngle) > 1f;
+
+            if (isSliding){
+                a *= Time.deltaTime;
+                b *= Time.deltaTime;
+            }
+        }
+
+        return 10f * (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
+    }
+
+    public void moveToLane(int lane) {
+        laneMovementDirection = Vector3.zero;
+        int validNewLane = Mathf.Clamp(lane, 0, LaneOriginPoints.transform.childCount - 1);
+        
+        if (currentLane != validNewLane) {
+            laneMovementDirection = (validNewLane < currentLane ? Vector3.left : Vector3.right);
+            currentLane = validNewLane;   
+        }
+    }
 }
