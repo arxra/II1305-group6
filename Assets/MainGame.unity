@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.06599261, g: 0.07277446, b: 0.11851183, a: 1}
+  m_IndirectSpecularColor: {r: 0.21986094, g: 0.22118664, b: 0.2345464, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2609,7 +2609,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1627981542}
-  - component: {fileID: 1627981544}
   - component: {fileID: 1627981545}
   - component: {fileID: 1627981546}
   - component: {fileID: 1627981547}
@@ -2647,21 +2646,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  text: {fileID: 0}
-  go: {fileID: 0}
+  text: {fileID: 1442735590}
+  go: {fileID: 1627981546}
   alive: 0
---- !u!135 &1627981544
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1627981541}
-  m_Material: {fileID: 13400000, guid: 5603b2d7b4a3e42b082684d760b8417b, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.25
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1627981545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2702,8 +2689,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.3107845, y: 1.71844, z: 0.37731123}
+  m_Center: {x: 0.023160875, y: 0.9668069, z: -0.002637267}
 --- !u!1 &1849500060
 GameObject:
   m_ObjectHideFlags: 0
