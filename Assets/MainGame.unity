@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.21986094, g: 0.22118664, b: 0.2345464, a: 1}
+  m_IndirectSpecularColor: {r: 0.22015885, g: 0.2211625, b: 0.23483795, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2627,7 +2627,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1627981541}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: 7}
+  m_LocalPosition: {x: 0, y: 1, z: 7}
   m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children:
   - {fileID: 729764341}
@@ -2665,8 +2665,9 @@ MonoBehaviour:
   MovementMagnitudeFactor: 12
   JumpMagnitudeFactor: 11
   GravityMagnitudeFactor: 20
-  SlidingAngle: 270
+  SlidingAngle: 290
   SlideTime: 1
+  GroundLevel: 0.001
 --- !u!114 &1627981546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2689,8 +2690,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.3107845, y: 1.71844, z: 0.37731123}
-  m_Center: {x: 0.023160875, y: 0.9668069, z: -0.002637267}
+  m_Size: {x: 1, y: 1.8006747, z: 0.30110034}
+  m_Center: {x: 0, y: 0.85667646, z: -0.050550178}
 --- !u!1 &1849500060
 GameObject:
   m_ObjectHideFlags: 0

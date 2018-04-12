@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-
 using System.Collections.Generic;
-
 using UnityEngine;
 
 public class PlayerControl : MonoBehaviour {
@@ -27,7 +25,11 @@ public class PlayerControl : MonoBehaviour {
     [Tooltip("The number of seconds that each sliding occurs")]
     public float SlideTime;
 
+    [Tooltip("The player's distance to the origin")]
+    public float GroundLevel;
+
     private Transform transf;
+    private BoxCollider collider;
     private bool isGrounded;
     private float laneLockingTimeout;
     private int currentLane;
@@ -44,11 +46,15 @@ public class PlayerControl : MonoBehaviour {
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
+        collider = this.gameObject.GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
     void Update () {
-        isGrounded = Physics.Raycast(new Ray(transf.position, Vector3.down), this.gameObject.GetComponent<BoxCollider>().size.y / 2 - 0.5f);
+        isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), getDistanceToCharacterBottom() + GroundLevel);
+        
+        // Lane movement
+        // #############
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
             moveToLane(currentLane - 1);
@@ -112,29 +118,36 @@ public class PlayerControl : MonoBehaviour {
 
         laneLockingTimeout -= Time.deltaTime;
         slidingTimer -= Time.deltaTime;
+
+        transf.position = new Vector3(
+            transf.position.x, 
+            Mathf.Max(transf.position.y, GroundLevel), 
+            transf.position.z
+        );
 	}
 
     public float getSlidingAngleDelta() {
         float currentClockwiseAngle = transf.eulerAngles.x;
         float a = 0, b = 0;
+        const float speedFactor = 10f;
 
         if (slidingTimer > 0f) {
-            a = (SlidingAngle - currentClockwiseAngle) * Time.deltaTime;
-            b = (SlidingAngle - currentClockwiseAngle - 360) * Time.deltaTime;
+            a = (SlidingAngle - currentClockwiseAngle) * Time.deltaTime * speedFactor;
+            b = (SlidingAngle - currentClockwiseAngle - 360) * Time.deltaTime * speedFactor;
             isSliding = true; 
         }
-        else if (isSliding) {
+        else if (isSliding) {     
             a = -currentClockwiseAngle;
             b = 360 - currentClockwiseAngle;
             isSliding = Mathf.Abs(currentClockwiseAngle) > 1f;
 
             if (isSliding){
-                a *= Time.deltaTime;
-                b *= Time.deltaTime;
+                a *= Time.deltaTime * speedFactor;
+                b *= Time.deltaTime * speedFactor;
             }
         }
 
-        return 10f * (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
+        return (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
     }
 
     public void moveToLane(int lane) {
@@ -145,5 +158,12 @@ public class PlayerControl : MonoBehaviour {
             laneMovementDirection = (validNewLane < currentLane ? Vector3.left : Vector3.right);
             currentLane = validNewLane;   
         }
+    }
+
+    public float getDistanceToCharacterBottom() {
+        return Mathf.Sqrt(
+            Mathf.Pow(collider.size.y * Mathf.Sin(transf.rotation.eulerAngles.x) / 2, 2) +
+            Mathf.Pow(collider.size.y * Mathf.Cos(transf.rotation.eulerAngles.x) / 2, 2)
+        );
     }
 }
