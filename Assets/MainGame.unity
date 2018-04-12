@@ -2613,6 +2613,7 @@ GameObject:
   - component: {fileID: 1627981545}
   - component: {fileID: 1627981546}
   - component: {fileID: 1627981547}
+  - component: {fileID: 1627981543}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2634,6 +2635,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1627981543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1627981541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb9ae853d4e9485488a472f6439cec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  text: {fileID: 0}
+  go: {fileID: 0}
+  alive: 0
 --- !u!135 &1627981544
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2675,10 +2691,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4390bf1c09a86f54fb304c5d8892a6a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alive: 0
---- !u!114 &1627981547
-MonoBehaviour:
-=======
+  alive: 1
+--- !u!65 &1627981547
+BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
