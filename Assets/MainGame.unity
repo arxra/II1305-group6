@@ -2698,12 +2698,15 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1627981541}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.999262, y: 1.7574954, z: 0.32842302}
-  m_Center: {x: 0, y: 0.8, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb9ae853d4e9485488a472f6439cec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  text: {fileID: 1442735590}
+  go: {fileID: 1627981546}
+  alive: 0
 --- !u!1 &1849500060
 GameObject:
   m_ObjectHideFlags: 0
