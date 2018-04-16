@@ -31,7 +31,7 @@ public class Score : MonoBehaviour {
         text.text = "Score : "+ score ;
         if (alive.Equals(false))
         {
-            text.rectTransform.anchoredPosition = new Vector2(0f, 50f);
+            text.rectTransform.anchoredPosition = new Vector2(0f, 30f);
         }
     }
 }
