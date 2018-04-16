@@ -39,6 +39,8 @@ public class PlayerControl : MonoBehaviour {
     private bool slideFromAir;
     private float verticalVelocity;
 
+    private TouchPlot plot;
+
     // Use this for initialization
 
     void Start(){
@@ -47,25 +49,35 @@ public class PlayerControl : MonoBehaviour {
         currentLane = 1;
         slideFromAir = false;
         collider = this.gameObject.GetComponent<BoxCollider>();
+        plot = new TouchPlot();
     }
 
     // Update is called once per frame
     void Update () {
         isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), getDistanceToCharacterBottom() + GroundLevel);
         
+        // Touch & Keyboard Input
+        // ######################
+
+        TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
+        bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
+             pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
+             pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
+             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;  
+
         // Lane movement
         // #############
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (pressingLeft)
             moveToLane(currentLane - 1);
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (pressingRight)
             moveToLane(currentLane + 1);
         
         if (laneMovementDirection != Vector3.zero) {
             // The following deals with the x-dimension:
             float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
             float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transf.position.x);
-            
+        
             transf.position += laneMovementDirection * speed * Time.deltaTime;
         }
         else if (laneLockingTimeout <= 0) {
@@ -76,9 +88,6 @@ public class PlayerControl : MonoBehaviour {
                 }
             }
         }
-    
-
-        bool pressingDown = Input.GetKeyDown(KeyCode.DownArrow);   
 
         // Jumping & gravity calculation
         // #############################
@@ -87,7 +96,7 @@ public class PlayerControl : MonoBehaviour {
         if (isGrounded){
             // On the ground:
             
-            if (Input.GetKeyDown(KeyCode.Space)){
+            if (pressingUp) {
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
                 slideFromAir = false;
@@ -151,7 +160,6 @@ public class PlayerControl : MonoBehaviour {
     }
 
     public void moveToLane(int lane) {
-        laneMovementDirection = Vector3.zero;
         int validNewLane = Mathf.Clamp(lane, 0, LaneOriginPoints.transform.childCount - 1);
         
         if (currentLane != validNewLane) {
