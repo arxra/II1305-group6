@@ -371,6 +371,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnPoints: {fileID: 283361487}
   SpawnTimeInterval: 1
+  OnlyInLaneA: []
+  OnlyInLaneB:
+  - BigBrick
+  OnlyInLaneC: []
 --- !u!4 &166155289
 Transform:
   m_ObjectHideFlags: 0
@@ -572,7 +576,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 283361487}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 100, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1215922212}
@@ -1482,7 +1486,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 750100554}
   m_LocalRotation: {x: 0.66446304, y: 0.24184473, z: -0.24184473, w: 0.66446304}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 100, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1394598534}
