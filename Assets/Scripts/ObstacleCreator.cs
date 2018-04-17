@@ -10,6 +10,11 @@ public class ObstacleCreator : MonoBehaviour {
 	[Tooltip("The number of seconds in-between each obstacle spawn")]
 	public float SpawnTimeInterval = 5;
 
+	
+	public List<string> OnlyInLaneA;
+	public List<string> OnlyInLaneB;
+	public List<string> OnlyInLaneC;
+
 	private float timeout;
 
 	private int lastLane;
@@ -27,15 +32,30 @@ public class ObstacleCreator : MonoBehaviour {
 		else {
 			timeout = SpawnTimeInterval;
 
-			int newLane = lastLane;
-			while (newLane == lastLane)
-				newLane = Random.Range(0, SpawnPoints.transform.childCount);
-
 			Transform candidates = this.gameObject.transform.Find("Candidates");
+			Transform randomChild = candidates.GetChild(Random.Range(0, candidates.childCount));
+
+			int newLane = lastLane;
+			if (OnlyInLaneA.Contains(randomChild.name))
+				newLane = 0;
+			else if (OnlyInLaneB.Contains(randomChild.name))
+				newLane = 1;
+			else if (OnlyInLaneC.Contains(randomChild.name))
+				newLane = 2;
+			else {
+				while (newLane == lastLane)
+					newLane = Random.Range(0, SpawnPoints.transform.childCount);
+			}
+
+			Transform spawnPoint = SpawnPoints.transform.GetChild(newLane);
 
 			Instantiate(
-				candidates.GetChild(Random.Range(0, candidates.childCount)), 
-				SpawnPoints.transform.GetChild(newLane).position, 
+				randomChild, 
+				new Vector3(
+					spawnPoint.position.x, 
+					spawnPoint.position.y + randomChild.transform.position.y,
+					spawnPoint.position.z
+				),
 				Quaternion.identity
 			);
 
