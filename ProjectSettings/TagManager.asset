@@ -9,6 +9,7 @@ TagManager:
   - obstacle
   - Obstacle
   - Pause
+  - Pick Up
   layers:
   - Default
   - TransparentFX
