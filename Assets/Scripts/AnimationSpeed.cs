@@ -16,13 +16,12 @@ public class AnimationSpeed : MonoBehaviour {
 		anim = GetComponent<Animator> ();
 		worldMoverReference = worldMoverFinder.GetComponent<WorldMover> ();
 		speed = 0;
-		speedScaler = 30.0f;
+		speedScaler = 50.0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		speed = worldMoverReference.GetCurrentSpeed() / speedScaler;
 		anim.speed = 1 + speed;
-		Debug.Log ("speed " + speed + "anim speed " + anim.speed) ;
 	}
 }
