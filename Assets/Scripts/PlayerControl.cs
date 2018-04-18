@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,8 +31,6 @@ public class PlayerControl : MonoBehaviour {
 
     [Tooltip("Reference to the camera")]
     public Transform CameraReference;
-
-    private Transform transf;
     private BoxCollider collider;
     private bool isGrounded;
     private float laneLockingTimeout;
@@ -46,15 +45,28 @@ public class PlayerControl : MonoBehaviour {
 
     private WorldMover worldMover;
 
+    private float distanceBetweenEachLane;
+
     // Use this for initialization
 
     void Start(){
-        transf  = this.gameObject.GetComponent<Transform>();
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
         collider = this.gameObject.GetComponent<BoxCollider>();
         plot = new TouchPlot();
+
+        Func<int, int, float>  calcDistanceBetweenLane = (l1, l2) => Mathf.Abs(
+            LaneOriginPoints.transform.GetChild(l2).transform.position.x - 
+            LaneOriginPoints.transform.GetChild(l1).transform.position.x
+        );
+
+        for(int i = 1; i < LaneOriginPoints.transform.childCount; i++){
+            if (i < 2)
+                distanceBetweenEachLane = calcDistanceBetweenLane(i - 1, i);
+            else if(Debug.isDebugBuild)
+                Debug.Assert(calcDistanceBetweenLane(i - 1, i) == distanceBetweenEachLane, "The distance between lanes must consistent");
+        }
     }
 
     // Update is called once per frame
@@ -64,13 +76,13 @@ public class PlayerControl : MonoBehaviour {
         
         RaycastHit hit;
         float distanceToGround = GroundLevelMargin + getEllipsRadius();
-        isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), out hit, distanceToGround);
+        isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
         
         if (isGrounded) 
-            transf.position = new Vector3(
-                transf.position.x, 
-                Mathf.Max(hit.point.y + distanceToGround, transf.position.y), 
-                transf.position.z
+            transform.position = new Vector3(
+                transform.position.x, 
+                Mathf.Max(hit.point.y + distanceToGround, transform.position.y), 
+                transform.position.z
             );
         
 
@@ -94,14 +106,14 @@ public class PlayerControl : MonoBehaviour {
         if (laneMovementDirection != Vector3.zero) {
             // The following deals with the x-dimension:
             float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
-            float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transf.position.x);
+            float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transform.position.x);
         
-            transf.position += laneMovementDirection * speed * Time.deltaTime;
+            transform.position += laneMovementDirection * speed * Time.deltaTime;
         }
         else if (laneLockingTimeout <= 0) {
             foreach(Transform laneTransf in LaneOriginPoints.transform) {
-                if (laneLockingTimeout <= 0 && Mathf.Abs(transf.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
-                    transf.position = new Vector3(laneTransf.position.x, transf.position.y, transf.position.z);
+                if (laneLockingTimeout <= 0 && Mathf.Abs(transform.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
+                    transform.position = new Vector3(laneTransf.position.x, transform.position.y, transform.position.z);
                     laneMovementDirection = Vector3.zero;
                 }
             }
@@ -140,29 +152,29 @@ public class PlayerControl : MonoBehaviour {
         }
 
 
-        transf.Rotate(getSlidingAngleDelta(), 0f, 0f);
-        transf.position += Vector3.up * verticalVelocity * Time.deltaTime;
+        transform.Rotate(getSlidingAngleDelta(), 0f, 0f);
+        transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
         slidingTimer -= Time.deltaTime;
 
-        transf.position = new Vector3(
-            transf.position.x, 
-            Mathf.Max(transf.position.y, GroundLevelMargin), 
-            transf.position.z
+        transform.position = new Vector3(
+            transform.position.x, 
+            Mathf.Max(transform.position.y, GroundLevelMargin), 
+            transform.position.z
         );
 	}
 
     void LateUpdate() {
         CameraReference.position = new Vector3(
             CameraReference.position.x, 
-            Mathf.Max(transf.position.y, 0), 
+            Mathf.Max(transform.position.y, 0), 
             CameraReference.position.z
         );
     }
 
     public float getSlidingAngleDelta() {
-        float currentClockwiseAngle = transf.eulerAngles.x;
+        float currentClockwiseAngle = transform.eulerAngles.x;
         float a = 0, b = 0;
         const float speedFactor = 10f;
 
@@ -190,6 +202,13 @@ public class PlayerControl : MonoBehaviour {
         
         if (currentLane != validNewLane) {
             laneMovementDirection = (validNewLane < currentLane ? Vector3.left : Vector3.right);
+
+            if (Physics.Raycast(new Ray(transform.position + collider.center, laneMovementDirection), distanceBetweenEachLane)) {
+                // Obstacle in the way
+                laneMovementDirection = Vector3.zero;
+                return;
+            }
+
             currentLane = validNewLane;   
         }
     }
@@ -197,7 +216,7 @@ public class PlayerControl : MonoBehaviour {
     private float getEllipsRadius() {
         float a = collider.size.y / 2;
         float b = collider.size.z / 2;
-        float angle = Mathf.Deg2Rad * transf.rotation.eulerAngles.x;
+        float angle = Mathf.Deg2Rad * transform.rotation.eulerAngles.x;
 
         return (
             a * b / 
