@@ -4,11 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Moving
   - ShowOnGameOver
   - obstacle
   - Obstacle
   - Pause
+  - MovingBackground
+  - Foreground Enemy
+  - Foreground Static
+  - Foreground Collectable
+  - Background
   layers:
   - Default
   - TransparentFX
