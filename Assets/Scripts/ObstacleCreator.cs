@@ -56,7 +56,7 @@ public class ObstacleCreator : MonoBehaviour {
 					spawnPoint.position.y + randomChild.transform.position.y,
 					spawnPoint.position.z
 				),
-				Quaternion.identity
+				randomChild.rotation
 			);
 
 			lastLane = newLane;

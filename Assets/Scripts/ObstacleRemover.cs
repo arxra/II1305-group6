@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleRemover : MonoBehaviour {
-	public string ObstacleTag = "Obstacle";
+	public string FilterTag;
 
-	void OnTriggerEnter(Collider other) {
-		if (other.tag.Contains(ObstacleTag))
-        	Destroy(other.gameObject);
+	void OnTriggerExit(Collider other) {
+		if (ObjectFilter.RelativesHasTags(other.gameObject, ObjectFilter.Tag.Foreground))	
+        	Destroy(other.gameObject, 10f);
     }
 }
