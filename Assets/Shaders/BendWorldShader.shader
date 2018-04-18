@@ -1,10 +1,14 @@
-﻿Shader "Peacerich/BendWorld"
+﻿// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
+
+Shader "Peacerich/BendWorld"
 {
 	Properties
 	{
-		_MainTex("Texture", 2D) = "white" {}
-		_Curvature("Curvature", Float) = 0.001
-		_Color("Color", Color) = (1,1,1,1)
+		_MainTex ("Texture", 2D) = "white" {}
+		_Curvature ("Curvature", Float) = 0.001
+		_Color ("Color", Color) = (1,1,1,1)
+		_Glossiness ("Smoothness", Range(0,1)) = 0.5
+        _Metallic ("Metallic", Range(0,1)) = 0.0
 	}
 	SubShader
 	{
@@ -12,10 +16,15 @@
 		LOD 200
 
 		CGPROGRAM
-		#pragma surface surf Lambert vertex:vert addshadow
+		#pragma surface surf Standard vertex:vert addshadow
 
-        uniform sampler2D _MainTex;
+		#pragma target 3.0
+
+        sampler2D _MainTex;
 		uniform float _Curvature;
+
+		half _Glossiness;
+        half _Metallic;
 		fixed4 _Color;
 
 		struct Input
@@ -32,13 +41,19 @@
 			v.vertex += mul(unity_WorldToObject, worldSpace);
 		}
 
-		void surf(Input IN, inout SurfaceOutput o)
+		UNITY_INSTANCING_BUFFER_START(Props)
+
+		UNITY_INSTANCING_BUFFER_END(Props)
+
+		void surf(Input IN, inout SurfaceOutputStandard o)
 		{
-			half4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
+			o.Metallic = _Metallic;
+			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
 		}
 		ENDCG
 	}
-	FallBack "Mobile/Diffuse"
+	FallBack "Diffuse"
 }

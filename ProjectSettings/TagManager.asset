@@ -13,6 +13,7 @@ TagManager:
   - Foreground Static
   - Foreground Collectable
   - Background
+  - Pick Up
   layers:
   - Default
   - TransparentFX
