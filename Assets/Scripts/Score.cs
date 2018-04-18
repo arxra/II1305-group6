@@ -21,7 +21,7 @@ public class Score : MonoBehaviour {
     int multiplier = 1; // Change this one later to get it's variable from the multiplier
     float scoreUpdate = 0;
     if(Time.timeScale == 1)
-      scoreUpdate += Time.deltaTime * GameObject.Find("Road").GetComponent<WorldMover>().currentSpeed;
+      scoreUpdate += Time.deltaTime * GameObject.Find("WorldMover").GetComponent<WorldMover>().GetCurrentSpeed();
 
     score += Mathf.RoundToInt(scoreUpdate * multiplier);
     updateText();
