@@ -26,7 +26,10 @@ public class PlayerControl : MonoBehaviour {
     public float SlideTime;
 
     [Tooltip("The player's distance to the origin")]
-    public float GroundLevel;
+    public float GroundLevelMargin;
+
+    [Tooltip("Reference to the camera")]
+    public Transform CameraReference;
 
     private Transform transf;
     private BoxCollider collider;
@@ -41,6 +44,8 @@ public class PlayerControl : MonoBehaviour {
 
     private TouchPlot plot;
 
+    private WorldMover worldMover;
+
     // Use this for initialization
 
     void Start(){
@@ -54,8 +59,21 @@ public class PlayerControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), getDistanceToCharacterBottom() + GroundLevel);
+        // Stay on the floor
+        // #################
         
+        RaycastHit hit;
+        float distanceToGround = GroundLevelMargin + getEllipsRadius();
+        isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), out hit, distanceToGround);
+        
+        if (isGrounded) 
+            transf.position = new Vector3(
+                transf.position.x, 
+                Mathf.Max(hit.point.y + distanceToGround, transf.position.y), 
+                transf.position.z
+            );
+        
+
         // Touch & Keyboard Input
         // ######################
 
@@ -114,7 +132,7 @@ public class PlayerControl : MonoBehaviour {
             // In the air:
 
             if(pressingDown) {
-                verticalVelocity = -JumpMagnitudeFactor;
+                verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
             }
             else
@@ -130,10 +148,18 @@ public class PlayerControl : MonoBehaviour {
 
         transf.position = new Vector3(
             transf.position.x, 
-            Mathf.Max(transf.position.y, GroundLevel), 
+            Mathf.Max(transf.position.y, GroundLevelMargin), 
             transf.position.z
         );
 	}
+
+    void LateUpdate() {
+        CameraReference.position = new Vector3(
+            CameraReference.position.x, 
+            Mathf.Max(transf.position.y, 0), 
+            CameraReference.position.z
+        );
+    }
 
     public float getSlidingAngleDelta() {
         float currentClockwiseAngle = transf.eulerAngles.x;
@@ -168,10 +194,17 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-    public float getDistanceToCharacterBottom() {
-        return Mathf.Sqrt(
-            Mathf.Pow(collider.size.y * Mathf.Sin(transf.rotation.eulerAngles.x) / 2, 2) +
-            Mathf.Pow(collider.size.y * Mathf.Cos(transf.rotation.eulerAngles.x) / 2, 2)
+    private float getEllipsRadius() {
+        float a = collider.size.y / 2;
+        float b = collider.size.z / 2;
+        float angle = Mathf.Deg2Rad * transf.rotation.eulerAngles.x;
+
+        return (
+            a * b / 
+            Mathf.Sqrt(
+                a * a * Mathf.Pow(Mathf.Sin(angle), 2f) + 
+                b * b * Mathf.Pow(Mathf.Cos(angle), 2f)
+            )
         );
     }
 }
