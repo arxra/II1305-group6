@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9a7d4741c1e23474ea28c4dabac7650a
-timeCreated: 1523958937
+guid: b352e8c252597b74dbf595aee923de74
+timeCreated: 1524125232
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -14,12 +14,17 @@ ModelImporter:
     400004: //RootNode
     400006: Sphere
     2000000: Camera
-    2100000: No Name
+    2100000: Material
     2300000: Sphere
     3300000: Sphere
     4300000: Sphere
     10800000: Lamp
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 53ccb5ee0a61b0f459201a62414d1087, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
