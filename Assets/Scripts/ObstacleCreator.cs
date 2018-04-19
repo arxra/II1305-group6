@@ -27,14 +27,13 @@ public class ObstacleCreator : MonoBehaviour {
 		}
 
 		public bool InstantiateAt(Vector3 position) {
-			if (RemainingInstances != 0) {
-				Object.Instantiate(Candidate, position, Candidate.transform.rotation);
-				RemainingInstances--;
-				return true;
-			}
-			else {
+			if (RemainingInstances == 0)
 				return false;
-			}
+			else if(RemainingInstances > 0)
+				RemainingInstances--;
+
+			Object.Instantiate(Candidate, position, Candidate.transform.rotation);
+			return true;
 		}
 
 		public Vector3 GetSuitableSpawnPoint(Transform spawnPoints, ref int lastLane) {
@@ -55,8 +54,8 @@ public class ObstacleCreator : MonoBehaviour {
 		}
 	} 
 
-	[Tooltip("The number of seconds in-between each obstacle spawn")]
-	public float SpawnTimeInterval;
+	[Tooltip("The time between each obstacle spawn [seconds]")]
+	public float AutoSpawnInterval = 1;
 	
 	[Tooltip("Overrides the default spawn settings for a candidate")]
 	public List<SpawnSession> SpawnOverrides = new List<SpawnSession>();
@@ -73,12 +72,12 @@ public class ObstacleCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		timeout = SpawnTimeInterval;	
+		timeout = AutoSpawnInterval;	
 		totalPopularity = 0;	
 		lastLane = -1;
 
 		foreach(Transform transf in transform.Find("Candidates")) {
-			var session = SpawnOverrides.Find(p => p.Candidate.Equals(transf.gameObject));
+			var session = SpawnOverrides.Find(s => s.Candidate.Equals(transf.gameObject));
 			
 			if (session == null) {
 				session = new SpawnSession(transf.gameObject);
@@ -93,16 +92,21 @@ public class ObstacleCreator : MonoBehaviour {
 	void Update () {
 		if (timeout > 0) {
 			timeout -= Time.deltaTime;
+			return;
 		}
-		else {
-			timeout = SpawnTimeInterval;
+		else
+			timeout = AutoSpawnInterval;
 
-			var session = SpawnNow();
-			
+		var session = SpawnNow();
+		if (session != null){
 			if (session.Candidate == null || !session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane))){
 				SpawnOverrides.Remove(session);
 				totalPopularity -= session.Popularity;
 			}
+		}
+		else {
+			Debug.LogWarning("ObstacleCreator: Disabling since there are no more obstacles left to spawn. Is this intentional?");
+			enabled = false;
 		}
 	}
 
@@ -115,6 +119,6 @@ public class ObstacleCreator : MonoBehaviour {
 				return session;
 		}
 
-		throw new UnityException("Blame Per!");
+		return null;
 	}
 }
