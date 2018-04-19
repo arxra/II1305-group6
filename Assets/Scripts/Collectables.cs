@@ -5,6 +5,12 @@ public class Collectables : MonoBehaviour {
   [Tooltip("Value of pickup in score")]
     public int value = 100; 
 
+  [Tooltip("Duration")]
+    public float _time;
+
+  [Tooltip("Multiplier value")]
+    public float _mult;
+
   void Start(){
   }
 
