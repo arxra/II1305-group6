@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: fb15bd3c1e7544a4b8681cada54979a1
-timeCreated: 1524057798
+guid: 891fc22b629b6c2448ca9673871b6aa2
+timeCreated: 1524121130
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -32,7 +32,9 @@ ModelImporter:
     2000000: Camera
     2100000: No Name
     2100002: Byggnad1Del3
-    2100004: Byggnad1Del1
+    2100004: Byggnad1Del2Front
+    2100006: Byggnad1Del1
+    2100008: Byggnad1Del2
     2300000: Wall1
     2300002: Wall1BackPlane
     2300004: Wall1FrontPlane
@@ -66,17 +68,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Byggnad1Del1
-    second: {fileID: 2100000, guid: 0c89d2bd6a16bea4f86e269198276428, type: 2}
+    second: {fileID: 2100000, guid: e207a3e09abd21440bb45026fffc6049, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Byggnad1Del2
+    second: {fileID: 2100000, guid: 728481d58e0e7834483c0751b8dbe841, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Byggnad1Del2Front
+    second: {fileID: 2100000, guid: 728481d58e0e7834483c0751b8dbe841, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Byggnad1Del3
-    second: {fileID: 2100000, guid: 4a68bdc9f343a2e4cb69544f45ecf8fe, type: 2}
+    second: {fileID: 2100000, guid: bd999db7693091f4b89d5e3109b04dae, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: No Name
-    second: {fileID: 2100000, guid: 7e4adb56ad7256f449d8ffbcaccccc0e, type: 2}
+    second: {fileID: 2100000, guid: 49220ff9a9e2f084cb9094c333289848, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

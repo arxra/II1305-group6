@@ -1,0 +1,160 @@
+fileFormatVersion: 2
+guid: 8a943c13d2cd9fc48bf2f2eb9de7b672
+timeCreated: 1524131185
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Bowl
+    100002: Camera.001
+    100004: //RootNode
+    100006: Lamp.001
+    100008: Lettuce
+    100010: Meat1
+    100012: Meat2
+    100014: Rice
+    100016: Stick1
+    100018: Stick2
+    400000: Bowl
+    400002: Camera.001
+    400004: //RootNode
+    400006: Lamp.001
+    400008: Lettuce
+    400010: Meat1
+    400012: Meat2
+    400014: Rice
+    400016: Stick1
+    400018: Stick2
+    2000000: Camera.001
+    2100000: Material.002
+    2100002: Material.004
+    2100004: Material.003
+    2100006: No Name
+    2100008: Material.001
+    2300000: Bowl
+    2300002: Lettuce
+    2300004: Meat1
+    2300006: Meat2
+    2300008: Rice
+    2300010: Stick1
+    2300012: Stick2
+    3300000: Bowl
+    3300002: Lettuce
+    3300004: Meat1
+    3300006: Meat2
+    3300008: Rice
+    3300010: Stick1
+    3300012: Stick2
+    4300000: Meat1
+    4300002: Lettuce
+    4300004: Meat2
+    4300006: Stick2
+    4300008: Stick1
+    4300010: Rice
+    4300012: Bowl
+    10800000: Lamp.001
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 53ccb5ee0a61b0f459201a62414d1087, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 4075ad21563842046ad28a2b96bb9ba7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: f1356582ee85fee4b9f0cba06f11b27f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: 7f23e79f13d081040a54fa9fef7cefd2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: f16438a55993ab94fa1b32096075542d, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
