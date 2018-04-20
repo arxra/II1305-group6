@@ -104,9 +104,10 @@ public class PlayerControl : MonoBehaviour {
             moveToLane(currentLane + 1);
         
         if (laneMovementDirection != Vector3.zero) {
+            Debug.Log(currentLane);
             // The following deals with the x-dimension:
             float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
-            float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transform.position.x);
+            float speed = Mathf.Min(MovementMagnitudeFactor * Mathf.Abs(destination - transform.position.x), 100f);
         
             transform.position += laneMovementDirection * speed * Time.deltaTime;
         }
