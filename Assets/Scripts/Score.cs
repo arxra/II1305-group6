@@ -6,7 +6,8 @@ public class Score : MonoBehaviour {
 
   [Tooltip("The current players score")]
     public int score;
-  public Text text;
+    public Text highScore;
+    public Text text;
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
@@ -28,6 +29,7 @@ public class Score : MonoBehaviour {
     _mv = GameObject.Find("WorldMover").GetComponent<WorldMover>();
     alive = true;
     score = 0;
+    highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
     updateText();
   }
 
@@ -47,11 +49,19 @@ public class Score : MonoBehaviour {
 
 
 
-    if(alive)
-      scoreUpdate += _mv.GetCurrentSpeed()* Time.deltaTime * multiplier;
+        if (alive)
+        {
+            scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
+            score += Mathf.RoundToInt(scoreUpdate);
+        }
+        int oldHighScore = PlayerPrefs.GetInt("highScore");
+        if (score > oldHighScore)
+              PlayerPrefs.SetInt("highScore", score);
+        highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
 
-    score += Mathf.RoundToInt(scoreUpdate);
-    updateText();
+
+
+        updateText();
   }
 
   void updateText()
