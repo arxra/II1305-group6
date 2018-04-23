@@ -7,11 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Drinks
-<<<<<<< HEAD
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-=======
   m_Shader: {fileID: 4800000, guid: df24c84390425d046ace0655d9d11589, type: 3}
->>>>>>> 69b092e20cd7d6ee848f9856e97d0d3d10c7e865
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
