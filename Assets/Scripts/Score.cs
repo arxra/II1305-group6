@@ -48,7 +48,7 @@ public class Score : MonoBehaviour {
 
 
     if(alive)
-      scoreUpdate += _mv.GetDistanceMoved()*Time.deltaTime*multiplier;
+      scoreUpdate += _mv.GetCurrentSpeed()* Time.deltaTime * multiplier;
 
     score += Mathf.RoundToInt(scoreUpdate);
     updateText();
