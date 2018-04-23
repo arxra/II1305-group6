@@ -11,12 +11,14 @@ public class PlayerWithController : MonoBehaviour {
 	public float jumpforce;
 	public float gravity; 
 	private TouchPlot plot;
-	const float LANE_DISTANCE = 7.0f;
+	public const float LANE_DISTANCE = 7.0f;
 	float zedOrigin;
 	bool slideFromAir;
 	bool isSliding;
 	float slideTimer;
 	int currentLane;
+	public float closeEnoughToLane;
+	public Transform CameraReference;
 
 	// Use this for initialization
 	void Start () {
@@ -25,18 +27,18 @@ public class PlayerWithController : MonoBehaviour {
 		gravity = 20.0f;
 		jumpforce = 12.0f;
 		desiredLane = 0;
-		speed = 42.0f;
+		speed = 80f;
 		verticalVelocity = 0.0f;
 		zedOrigin = gameObject.transform.position.z;
 		slideFromAir = false;
 		isSliding = false;
 		slideTimer = 0.0f;
 		currentLane = desiredLane;
+		closeEnoughToLane = 0.001f;
 	}
 
 	// Update is called once per frame
 	void Update () {
-
 		TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
 		bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
 		pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
@@ -50,7 +52,7 @@ public class PlayerWithController : MonoBehaviour {
 			moveLane (true);
 
 		//the direction of Desiered Lane
-		Vector3 towards = gameObject.transform.position.z * Vector3.forward;
+		Vector3 towards = Vector3.zero;
 		if (desiredLane == -1)
 			towards += Vector3.left * LANE_DISTANCE;
 		else if (desiredLane == 1)
@@ -67,13 +69,11 @@ public class PlayerWithController : MonoBehaviour {
 		//actual vector that will perform move operation
 		Vector3 moveVector = Vector3.zero;
 
-		if (Mathf.Abs((towards - gameObject.transform.position).x) < 0.3) //when close enough teleport, stops from overshooting!
+		if (Mathf.Abs((towards - gameObject.transform.position).x) < closeEnoughToLane) //when close enough teleport, stops from overshooting!
 			gameObject.transform.position =  new Vector3(currentLane * LANE_DISTANCE, gameObject.transform.position.y, gameObject.transform.position.z);
 
-
 		moveVector.x = (towards - gameObject.transform.position).normalized.x * speed;
-		moveVector.z = zedOrigin - gameObject.transform.position.z; 
-		Debug.Log (moveVector.z);
+		moveVector.z = (zedOrigin * Vector3.forward - gameObject.transform.position).normalized.z * speed;
 
 		if (player.isGrounded) {
 			if (pressingUp) {
@@ -112,7 +112,6 @@ public class PlayerWithController : MonoBehaviour {
 			stopSliding ();
 			isSliding = false;
 		}
-
 	}
 
 	void moveLane(bool goRight) {
@@ -150,5 +149,13 @@ public class PlayerWithController : MonoBehaviour {
 		if (!other.gameObject.CompareTag ("Background")) {
 			desiredLane = currentLane;
 		}
+	}
+
+	void LateUpdate() {
+		CameraReference.position = new Vector3 (
+			CameraReference.position.x, 
+			Mathf.Max (transform.position.y, 0), 
+			CameraReference.position.z
+		);
 	}
 }
