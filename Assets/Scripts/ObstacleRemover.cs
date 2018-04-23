@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ObstacleRemover : MonoBehaviour {
-	public string FilterTag;
+	public ObjectFilter.Tag _filterTag = ObjectFilter.Tag.Foreground;
 
-	void OnTriggerExit(Collider other) {
-		if (ObjectFilter.RelativesHasTags(other.gameObject, ObjectFilter.Tag.Foreground))	
+	void OnTriggerEnter(Collider other) {
+		if (ObjectFilter.RelativesHasTags(other.gameObject, _filterTag))	
         	Destroy(other.gameObject, 10f);
     }
 }
