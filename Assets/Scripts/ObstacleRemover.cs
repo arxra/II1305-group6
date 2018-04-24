@@ -5,8 +5,10 @@ using UnityEngine;
 public class ObstacleRemover : MonoBehaviour {
 	public string FilterTag;
 
-	void OnTriggerExit(Collider other) {
-		if (ObjectFilter.RelativesHasTags(other.gameObject, ObjectFilter.Tag.Foreground))	
-        	Destroy(other.gameObject, 10f);
+	void OnTriggerEnter(Collider other) {
+		var enemy = ObjectFilter.RelativesHasTags(other.gameObject, ObjectFilter.Tag.Foreground);
+
+		if (enemy != null)	
+        	Object.Destroy(enemy, 10f);
     }
 }

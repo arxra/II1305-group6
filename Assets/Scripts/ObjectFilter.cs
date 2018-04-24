@@ -19,16 +19,25 @@ public static class ObjectFilter {
 		return new List<GameObject>(EntitiesWithTags(tags)).Contains(entity);
 	}
 
-	public static bool RelativesHasTags(GameObject entity, params Tag[] tags) {
-		Transform parent = entity.transform.parent;
+	public static GameObject RelativesHasTags(GameObject entity, params Tag[] tags) {
+		List<GameObject> entities = new List<GameObject>(EntitiesWithTags(tags));
 
-		return EntityHasTags(entity, tags) || (parent != null ? RelativesHasTags(parent.gameObject, tags) : false);
+		Transform current = entity.transform;
+		while (current != null) {
+			if (entities.Contains(current.gameObject))
+				return current.gameObject;
+			else
+				current = current.transform.parent;
+		}
+
+		return null;
 	}
 
 	public static IEnumerable<GameObject> EntitiesWithTags(params Tag[] tags) {
 		bool hasTags;
 
 		foreach(GameObject obj in GameObject.FindObjectsOfType(typeof (GameObject))){
+			
 			hasTags = true;
 			
 			foreach(Tag tag in tags) {
@@ -36,8 +45,12 @@ public static class ObjectFilter {
         			hasTags = false;
 			}
 
-			if(hasTags)
+			if(hasTags){
+				
 				yield return obj;
+				
+			}
+
 		}
 	}
 }
