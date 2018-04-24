@@ -18,24 +18,19 @@ public class WorldMover : MonoBehaviour {
 
     private float currentSpeed;
 
-    private KeyValuePair<GameObject, Bounds> partA, partB;
+    private GameObject partA, partB;
 
+    private Vector3 posA, posB;
 
     // Use this for initialization
     void Start () {
         currentSpeed = 0f;
 
-        var a = GameObject.Find("Part A");
-        Bounds bounds_a = new Bounds(a.transform.position, Vector3.zero);
-        foreach(Renderer renderer in a.GetComponentsInChildren<Renderer>()) 
-            bounds_a.Encapsulate(renderer.bounds);
-        partA = new KeyValuePair<GameObject, Bounds>(a, bounds_a);
+        partA = GameObject.Find("Part A");
+        partB = GameObject.Find("Part B");
 
-        var b = GameObject.Find("Part B");
-        Bounds bounds_b = new Bounds(b.transform.position, Vector3.zero);
-        foreach(Renderer renderer in b.GetComponentsInChildren<Renderer>()) 
-            bounds_b.Encapsulate(renderer.bounds);
-        partB = new KeyValuePair<GameObject, Bounds>(b, bounds_b);
+        posA = partA.transform.position;
+        posB = partB.transform.position;
     }
 
   // Update is called once per frame
@@ -53,21 +48,24 @@ public class WorldMover : MonoBehaviour {
         // Background objects
         // ##################
 
-        partA.Key.transform.position += offset;
-        partB.Key.transform.position += offset;
+        partA.transform.position += offset;
+        partB.transform.position += offset;
 
-        // |  A  |  B  | 
-        var criticalZPos = partA.Key.transform.Find("End").transform.position.z;
-        if (criticalZPos <= 0){
-            partA.Key.transform.position += Vector3.forward * (-criticalZPos + partA.Value.size.z + partB.Value.size.z - 23f);
+        // Switch the positioning of part A and B
+        // ######################################
+        
+        if (partA.transform.Find("End").transform.position.z <= 0){
             
+            partA.transform.position = posB;
+            partB.transform.position = posA;
+
             var tmp = partA;
             partA = partB;
             partB = tmp;
         }
     }
 
-    public float GetDistanceMoved() {
+    public float GetTotalDistanceMoved() {
         float timeToReachMax = MaxSpeed / Acceleration;
  
         return currentSpeed / 2f * timeToReachMax + MaxSpeed * (Time.time - timeToReachMax);
@@ -78,5 +76,3 @@ public class WorldMover : MonoBehaviour {
         return currentSpeed;
     }
 }
-
-
