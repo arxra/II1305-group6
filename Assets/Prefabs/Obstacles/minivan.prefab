@@ -256,7 +256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4785141028191142}
   m_Layer: 0
-  m_Name: minivan 1
+  m_Name: minivan
   m_TagString: Foreground Static
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

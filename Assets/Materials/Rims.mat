@@ -25,6 +25,6 @@ Material:
     m_Floats:
     - _Curvature: 0.001
     - _Glossiness: 0.5
-    - _Metallic: 0
+    - _Metallic: 0.5
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.5735294, g: 0.5735294, b: 0.5735294, a: 1}
