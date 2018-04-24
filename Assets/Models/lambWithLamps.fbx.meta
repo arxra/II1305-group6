@@ -1,0 +1,194 @@
+fileFormatVersion: 2
+guid: 3a9771a07ee4a49e88308ea3372b2653
+timeCreated: 1524494450
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: houselamp
+    100002: houselamp.001
+    100004: JapanLamp
+    100006: JapanLamp.001
+    100008: JapanLamp.002
+    100010: //RootNode
+    100012: pole
+    100014: pole.001
+    100016: roof
+    100018: roof.001
+    100020: rope
+    100022: topOchBot
+    100024: topOchBot.001
+    100026: topOchBot.002
+    100028: windows
+    100030: windows.001
+    400000: houselamp
+    400002: houselamp.001
+    400004: JapanLamp
+    400006: JapanLamp.001
+    400008: JapanLamp.002
+    400010: //RootNode
+    400012: pole
+    400014: pole.001
+    400016: roof
+    400018: roof.001
+    400020: rope
+    400022: topOchBot
+    400024: topOchBot.001
+    400026: topOchBot.002
+    400028: windows
+    400030: windows.001
+    2100000: No Name
+    2100002: Material.002
+    2100004: window
+    2100006: houselamp_pole
+    2100008: roof
+    2300000: houselamp
+    2300002: houselamp.001
+    2300004: JapanLamp
+    2300006: JapanLamp.001
+    2300008: JapanLamp.002
+    2300010: pole
+    2300012: pole.001
+    2300014: roof
+    2300016: roof.001
+    2300018: rope
+    2300020: topOchBot
+    2300022: topOchBot.001
+    2300024: topOchBot.002
+    2300026: windows
+    2300028: windows.001
+    3300000: houselamp
+    3300002: houselamp.001
+    3300004: JapanLamp
+    3300006: JapanLamp.001
+    3300008: JapanLamp.002
+    3300010: pole
+    3300012: pole.001
+    3300014: roof
+    3300016: roof.001
+    3300018: rope
+    3300020: topOchBot
+    3300022: topOchBot.001
+    3300024: topOchBot.002
+    3300026: windows
+    3300028: windows.001
+    4300000: rope
+    4300002: topOchBot.002
+    4300004: JapanLamp.002
+    4300006: JapanLamp.001
+    4300008: topOchBot.001
+    4300010: windows.001
+    4300012: pole.001
+    4300014: roof.001
+    4300016: houselamp.001
+    4300018: topOchBot
+    4300020: JapanLamp
+    4300022: houselamp
+    4300024: roof
+    4300026: pole
+    4300028: windows
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 0c11c0e69c79642bfa965e777c0d3013, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 7477797732a1040d1bd22947b40ec744, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: houselamp_pole
+    second: {fileID: 2100000, guid: 4effc44b290e94f3c8fc542430ae1ed5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: roof
+    second: {fileID: 2100000, guid: f82265d9b8cf1405aa31689eb098b6b5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: window
+    second: {fileID: 2100000, guid: ece751bca04fd4c72873a4ef07849d63, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
