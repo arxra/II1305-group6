@@ -6,13 +6,15 @@ public class Score : MonoBehaviour {
 
   [Tooltip("The current players score")]
     public int score;
-    public Text highScore;
-    public Text text;
+      public Text highScore;
+      public Text text;
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
   private WorldMover _mv = new WorldMover();
+
+  private float _foodFactor;
 
   public class MulStruct {
     public MulStruct (float t, float m, int location){
@@ -30,7 +32,7 @@ public class Score : MonoBehaviour {
     alive = true;
     score = 0;
     highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-    updateText();
+      updateText();
   }
 
   // Update is called once per frame
@@ -46,22 +48,22 @@ public class Score : MonoBehaviour {
       else
         multiplier += mul._mult;
     }
-
-
-
-        if (alive)
-        {
-            scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
-            score += Mathf.RoundToInt(scoreUpdate);
-        }
-        int oldHighScore = PlayerPrefs.GetInt("highScore");
-        if (score > oldHighScore)
-              PlayerPrefs.SetInt("highScore", score);
-        highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-
-
-
-        updateText();
+    
+      
+      
+      if (alive)
+      {
+        scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
+          score += Mathf.RoundToInt(scoreUpdate);
+      }
+    int oldHighScore = PlayerPrefs.GetInt("highScore");
+      if (score > oldHighScore)
+        PlayerPrefs.SetInt("highScore", score);
+          highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
+          
+          
+          
+          updateText();
   }
 
   void updateText()
@@ -69,11 +71,18 @@ public class Score : MonoBehaviour {
     text.text = "Score : "+ score ;
   }
 
+  public float SizeMultiplier(){
+    float tmp = _foodFactor;
+    _foodFactor = 0f;
+    return tmp;
+  }
+
   void OnTriggerEnter(Collider col){
     if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
       GameObject pckup = col.gameObject;
       score += pckup.GetComponent<Collectables>().value;
       _multis.Add(Time.frameCount, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
+      _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
       Destroy(pckup);
     }
   }
