@@ -22,7 +22,7 @@ public static class ObjectFilter {
 	public static bool RelativesHasTags(GameObject entity, params Tag[] tags) {
 		Transform parent = entity.transform.parent;
 
-		return new List<GameObject>(EntitiesWithTags(tags)).Contains(entity) || (parent != null ? RelativesHasTags(parent.gameObject, tags) : false);
+		return EntityHasTags(entity, tags) || (parent != null ? RelativesHasTags(parent.gameObject, tags) : false);
 	}
 
 	public static IEnumerable<GameObject> EntitiesWithTags(params Tag[] tags) {
