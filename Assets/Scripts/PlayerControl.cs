@@ -33,6 +33,7 @@ public class PlayerControl : MonoBehaviour {
     public Transform CameraReference;
     private BoxCollider collider;
     private bool isGrounded;
+    private bool isJumping;
     private float laneLockingTimeout;
     private int currentLane;
     private Vector3 laneMovementDirection;
@@ -40,6 +41,7 @@ public class PlayerControl : MonoBehaviour {
     private float slidingTimer;
     private bool slideFromAir;
     private float verticalVelocity;
+    private Animator animator;
 
     private TouchPlot plot;
 
@@ -55,6 +57,8 @@ public class PlayerControl : MonoBehaviour {
         slideFromAir = false;
         collider = this.gameObject.GetComponent<BoxCollider>();
         plot = new TouchPlot();
+        worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
+        animator = GetComponent<Animator>();
 
         Func<int, int, float>  calcDistanceBetweenLane = (l1, l2) => Mathf.Abs(
             LaneOriginPoints.transform.GetChild(l2).transform.position.x - 
@@ -102,35 +106,47 @@ public class PlayerControl : MonoBehaviour {
             moveToLane(currentLane - 1);
         else if (pressingRight)
             moveToLane(currentLane + 1);
-        
+
+        Vector3 euler = transform.rotation.eulerAngles;
         if (laneMovementDirection != Vector3.zero) {
-            Debug.Log(currentLane);
-            // The following deals with the x-dimension:
-            float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
-            float speed = Mathf.Min(MovementMagnitudeFactor * Mathf.Abs(destination - transform.position.x), 100f);
-        
-            transform.position += laneMovementDirection * speed * Time.deltaTime;
-        }
-        else if (laneLockingTimeout <= 0) {
-            foreach(Transform laneTransf in LaneOriginPoints.transform) {
-                if (laneLockingTimeout <= 0 && Mathf.Abs(transform.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
-                    transform.position = new Vector3(laneTransf.position.x, transform.position.y, transform.position.z);
-                    laneMovementDirection = Vector3.zero;
+            float xDestination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
+            float xSpeed = Mathf.Min(MovementMagnitudeFactor * Mathf.Abs(xDestination - transform.position.x), 100f);
+            
+            // This will make the player look in the direction of the lane that the player moves towards:
+            euler.y = laneMovementDirection.x * 70 * Mathf.Clamp(xSpeed / 10f, 0f, 1f);    
+
+            // This will do the actual move of the player in the direction of the next lane:
+            transform.position += laneMovementDirection * xSpeed * Time.deltaTime;
+
+            if (laneLockingTimeout <= 0) {
+                foreach(Transform laneTransf in LaneOriginPoints.transform) {
+                    if (laneLockingTimeout <= 0 && Mathf.Abs(transform.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  
+                        transform.position = new Vector3(laneTransf.position.x, transform.position.y, transform.position.z);
                 }
+
+                laneMovementDirection = Vector3.zero;
             }
         }
+        else {
+            euler.y = 0f;
+        }
+        
+        transform.rotation = Quaternion.Euler(euler);
 
         // Jumping & gravity calculation
         // #############################
         
-
         if (isGrounded){
             // On the ground:
             
+            isJumping = false;
+
             if (pressingUp) {
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
                 slideFromAir = false;
+                isJumping = true;
+                animator.SetTrigger("Jump");
             }
             else{
                 if (pressingDown || slideFromAir){
@@ -140,6 +156,8 @@ public class PlayerControl : MonoBehaviour {
 
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
             }
+
+
         }
         else {
             // In the air:
@@ -153,43 +171,38 @@ public class PlayerControl : MonoBehaviour {
         }
 
 
-        transform.Rotate(getSlidingAngleDelta(), 0f, 0f);
+        transform.Rotate(getTemporaryAngleDelta(transform.eulerAngles.x, SlidingAngle, ref isSliding, slidingTimer > 0), 0f, 0f);
         transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
         slidingTimer -= Time.deltaTime;
-
-        transform.position = new Vector3(
-            transform.position.x, 
-            Mathf.Max(transform.position.y, GroundLevelMargin), 
-            transform.position.z
-        );
 	}
 
     void LateUpdate() {
-        CameraReference.position = new Vector3(
-            CameraReference.position.x, 
-            Mathf.Max(transform.position.y, 0), 
-            CameraReference.position.z
-        );
+        if (!isJumping) {
+            CameraReference.position = new Vector3(
+                CameraReference.position.x, 
+                Mathf.Max(transform.position.y, 0), 
+                CameraReference.position.z
+            );
+        }
     }
 
-    public float getSlidingAngleDelta() {
-        float currentClockwiseAngle = transform.eulerAngles.x;
+    public float getTemporaryAngleDelta(float currentClockwiseAngle, float requestedClockwiseAngle, ref bool activeMotion, bool keepInNewPosition) {
         float a = 0, b = 0;
         const float speedFactor = 10f;
-
-        if (slidingTimer > 0f) {
-            a = (SlidingAngle - currentClockwiseAngle) * Time.deltaTime * speedFactor;
-            b = (SlidingAngle - currentClockwiseAngle - 360) * Time.deltaTime * speedFactor;
-            isSliding = true; 
+        
+        if (keepInNewPosition) {
+            a = (requestedClockwiseAngle - currentClockwiseAngle) * Time.deltaTime * speedFactor;
+            b = (requestedClockwiseAngle - currentClockwiseAngle - 360) * Time.deltaTime * speedFactor;
+            activeMotion = true; 
         }
-        else if (isSliding) {     
+        else if (activeMotion) {     
             a = -currentClockwiseAngle;
             b = 360 - currentClockwiseAngle;
-            isSliding = Mathf.Abs(currentClockwiseAngle) > 1f;
+            activeMotion = Mathf.Abs(currentClockwiseAngle) > 1f;
 
-            if (isSliding){
+            if (activeMotion){
                 a *= Time.deltaTime * speedFactor;
                 b *= Time.deltaTime * speedFactor;
             }
@@ -210,6 +223,7 @@ public class PlayerControl : MonoBehaviour {
                 return;
             }
 
+            laneLockingTimeout = 0.5f;
             currentLane = validNewLane;   
         }
     }
