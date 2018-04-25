@@ -1,10 +1,9 @@
-﻿// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
-
-Shader "Peacerich/BendWorld"
+﻿Shader "SumoDash"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		_MainTex ("Albedo", 2D) = "white" {}
+		_Normal("Normal Map", 2D) = "bump" {}
 		_Curvature ("Curvature", Float) = 0.001
 		_Color ("Color", Color) = (1,1,1,1)
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
@@ -12,7 +11,7 @@ Shader "Peacerich/BendWorld"
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType" = "Opaque" }
 		LOD 200
 
 		CGPROGRAM
@@ -21,6 +20,7 @@ Shader "Peacerich/BendWorld"
 		#pragma target 3.0
 
         sampler2D _MainTex;
+		sampler2D _Normal;
 		uniform float _Curvature;
 
 		half _Glossiness;
@@ -49,6 +49,7 @@ Shader "Peacerich/BendWorld"
 		{
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
+			o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_MainTex));
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
