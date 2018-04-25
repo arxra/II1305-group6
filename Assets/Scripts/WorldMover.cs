@@ -16,6 +16,8 @@ public class WorldMover : MonoBehaviour {
     [Tooltip("Limits the maximum speed of the world [m/s]")]
     public float MaxSpeed;
 
+    public bool IsKill;
+
     private float currentSpeed;
 
     private GameObject partA, partB;
@@ -35,7 +37,19 @@ public class WorldMover : MonoBehaviour {
 
   // Update is called once per frame
     void Update () {
-        currentSpeed = Mathf.Clamp(currentSpeed + Acceleration * Time.deltaTime, 0f, MaxSpeed);
+        if (IsKill && currentSpeed != 0){
+            if (currentSpeed > 0)
+                currentSpeed *= -1f;
+
+            if (Mathf.Abs(currentSpeed) > 1f)
+                currentSpeed *= 0.5f;
+            else
+                currentSpeed = 0f;
+        }
+        else 
+            currentSpeed = Mathf.Clamp(currentSpeed + Acceleration * Time.deltaTime, 0f, MaxSpeed);    
+        
+
         Vector3 offset = MovementDirection * currentSpeed * Time.deltaTime;
 
         // Foreground objects
