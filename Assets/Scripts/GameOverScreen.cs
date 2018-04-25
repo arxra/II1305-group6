@@ -13,6 +13,7 @@ public class GameOverScreen : MonoBehaviour
     public bool alive = true;
     Animator anim;
 
+    private WorldMover worldMover;
     
     void Start()
     {
@@ -21,6 +22,7 @@ public class GameOverScreen : MonoBehaviour
         pauseObjects = GameObject.FindGameObjectsWithTag("Pause");
         alive = true;
         hidePause();
+        worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
 
     }
 
@@ -40,6 +42,7 @@ public class GameOverScreen : MonoBehaviour
                 hidePause();
             }
 
+            worldMover.IsKill = false;
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -48,6 +51,7 @@ public class GameOverScreen : MonoBehaviour
         {
             alive = false;
             go.GetComponent<GameOverManager>().GameOver();
+            worldMover.IsKill = true;
         }
     }
 
