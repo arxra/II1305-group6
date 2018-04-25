@@ -1,25 +1,30 @@
 fileFormatVersion: 2
-guid: 8881a1bd21434b24e968c8a2598abd8e
-timeCreated: 1524131184
+guid: d7050e2f887e7a747bb02f7a05d9451a
+timeCreated: 1524572642
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: Camera
-    100002: Cylinder
-    100004: Lamp
+    100002: Lamp
+    100004: Lid
     100006: //RootNode
     400000: Camera
-    400002: Cylinder
-    400004: Lamp
+    400002: Lamp
+    400004: Lid
     400006: //RootNode
     2000000: Camera
-    2100000: No Name
-    2300000: Cylinder
-    3300000: Cylinder
-    4300000: Cylinder
+    2100000: ManholeClosed
+    2300000: Lid
+    3300000: Lid
+    4300000: Lid
     10800000: Lamp
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ManholeClosed
+    second: {fileID: 2100000, guid: e7e227e633b0cec438af976859860f19, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

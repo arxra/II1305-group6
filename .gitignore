@@ -10,7 +10,8 @@ Assets/AssetStoreTools*
 /.vs/
 
 # VS Code shit
-Assembly-CSharp.csproj
+.csproj
+.sln
 .idea/
 .vscode/
 obj/

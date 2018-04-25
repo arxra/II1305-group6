@@ -11,8 +11,8 @@ public class Collectables : MonoBehaviour {
   [Tooltip("Multiplier value")]
     public float _mult;
 
-  void Start(){
-  }
+  [Tooltip("Size modifier in x'times scale")]
+    public float _sizeMultiplier;
 
   void Update() {
     // Rotate the object around its local X axis at 1 degree per second
