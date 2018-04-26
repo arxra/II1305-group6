@@ -81,7 +81,7 @@ public class Score : MonoBehaviour {
     if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
       GameObject pckup = col.gameObject;
       score += pckup.GetComponent<Collectables>().value;
-      _multis.Add(Time.frameCount, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
+      _multis.Add(_multis.Count, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
       _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
       Destroy(pckup);
     }
