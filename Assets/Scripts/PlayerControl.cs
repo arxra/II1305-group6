@@ -49,6 +49,8 @@ public class PlayerControl : MonoBehaviour {
 
     private float distanceBetweenEachLane;
 
+    private Quaternion enforcedRotation;
+
     // Use this for initialization
 
     void Start(){
@@ -75,6 +77,8 @@ public class PlayerControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        enforcedRotation = transform.rotation;
+
         // Stay on the floor
         // #################
         
@@ -130,8 +134,9 @@ public class PlayerControl : MonoBehaviour {
         else {
             euler.y = 0f;
         }
-        
-        transform.rotation = Quaternion.Euler(euler);
+
+        euler.x += getTemporaryAngleDelta(euler.x, SlidingAngle, ref isSliding, slidingTimer > 0);
+        enforcedRotation = Quaternion.Euler(euler);
 
         // Jumping & gravity calculation
         // #############################
@@ -140,6 +145,7 @@ public class PlayerControl : MonoBehaviour {
             // On the ground:
             
             isJumping = false;
+            animator.ResetTrigger("Jump");
 
             if (pressingUp) {
                 verticalVelocity = JumpMagnitudeFactor;
@@ -152,12 +158,14 @@ public class PlayerControl : MonoBehaviour {
                 if (pressingDown || slideFromAir){
                     slidingTimer = SlideTime;
                     slideFromAir = false;
+                    enforcedRotation = Quaternion.identity;
                 }
 
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
-            }
+            }    
 
-
+            if (!isJumping && !isSliding)
+                enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
         }
         else {
             // In the air:
@@ -165,13 +173,13 @@ public class PlayerControl : MonoBehaviour {
             if(pressingDown) {
                 verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
+                animator.ResetTrigger("Jump");
             }
             else
                 verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
         }
 
-
-        transform.Rotate(getTemporaryAngleDelta(transform.eulerAngles.x, SlidingAngle, ref isSliding, slidingTimer > 0), 0f, 0f);
+        // Apply the new transformations
         transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
@@ -179,6 +187,9 @@ public class PlayerControl : MonoBehaviour {
 	}
 
     void LateUpdate() {
+        if (isSliding || !isJumping || slideFromAir)
+            transform.rotation = enforcedRotation;
+        
         if (!isJumping) {
             CameraReference.position = new Vector3(
                 CameraReference.position.x, 
@@ -200,14 +211,14 @@ public class PlayerControl : MonoBehaviour {
         else if (activeMotion) {     
             a = -currentClockwiseAngle;
             b = 360 - currentClockwiseAngle;
-            activeMotion = Mathf.Abs(currentClockwiseAngle) > 1f;
+            activeMotion = Mathf.Abs(currentClockwiseAngle) > 10f && Mathf.Abs(360 - currentClockwiseAngle) > 10f;
 
             if (activeMotion){
                 a *= Time.deltaTime * speedFactor;
                 b *= Time.deltaTime * speedFactor;
-            }
+            }    
         }
-
+        
         return (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
     }
 
