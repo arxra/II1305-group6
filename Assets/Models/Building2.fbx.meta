@@ -1,94 +1,72 @@
 fileFormatVersion: 2
-guid: 891fc22b629b6c2448ca9673871b6aa2
-timeCreated: 1524121130
+guid: 825027abc0d89b24ebef67d566dbf7e9
+timeCreated: 1524728579
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Camera
-    100004: Lamp
-    100006: Wall1
-    100008: Wall1BackPlane
-    100010: Wall1FrontPlane
-    100012: Wall2
-    100014: Wall2BackPlane
-    100016: Wall2FrontPlane
-    100018: Wall3
-    100020: Wall3BackPlane
-    100022: Wall3FrontPlane
+    100002: Wall1
+    100004: Wall1FrontPlane
+    100006: Wall2
+    100008: Wall2FrontPlane
+    100010: Wall3
+    100012: Wall3FrontPlane
+    100014: WallBackPlane
     400000: //RootNode
-    400002: Camera
-    400004: Lamp
-    400006: Wall1
-    400008: Wall1BackPlane
-    400010: Wall1FrontPlane
-    400012: Wall2
-    400014: Wall2BackPlane
-    400016: Wall2FrontPlane
-    400018: Wall3
-    400020: Wall3BackPlane
-    400022: Wall3FrontPlane
-    2000000: Camera
+    400002: Wall1
+    400004: Wall1FrontPlane
+    400006: Wall2
+    400008: Wall2FrontPlane
+    400010: Wall3
+    400012: Wall3FrontPlane
+    400014: WallBackPlane
     2100000: No Name
-    2100002: Byggnad1Del3
-    2100004: Byggnad1Del2Front
-    2100006: Byggnad1Del1
-    2100008: Byggnad1Del2
+    2100002: Byggnad2Del3
+    2100004: Byggnad2Del2
+    2100006: Byggnad2Del1
     2300000: Wall1
-    2300002: Wall1BackPlane
-    2300004: Wall1FrontPlane
-    2300006: Wall2
-    2300008: Wall2BackPlane
-    2300010: Wall2FrontPlane
-    2300012: Wall3
-    2300014: Wall3BackPlane
-    2300016: Wall3FrontPlane
+    2300002: Wall1FrontPlane
+    2300004: Wall2
+    2300006: Wall2FrontPlane
+    2300008: Wall3
+    2300010: Wall3FrontPlane
+    2300012: WallBackPlane
     3300000: Wall1
-    3300002: Wall1BackPlane
-    3300004: Wall1FrontPlane
-    3300006: Wall2
-    3300008: Wall2BackPlane
-    3300010: Wall2FrontPlane
-    3300012: Wall3
-    3300014: Wall3BackPlane
-    3300016: Wall3FrontPlane
-    4300000: Wall2BackPlane
-    4300002: Wall1BackPlane
-    4300004: Wall3BackPlane
-    4300006: Wall3FrontPlane
-    4300008: Wall2FrontPlane
-    4300010: Wall1FrontPlane
-    4300012: Wall2
-    4300014: Wall3
-    4300016: Wall1
-    10800000: Lamp
+    3300002: Wall1FrontPlane
+    3300004: Wall2
+    3300006: Wall2FrontPlane
+    3300008: Wall3
+    3300010: Wall3FrontPlane
+    3300012: WallBackPlane
+    4300000: WallBackPlane
+    4300002: Wall3FrontPlane
+    4300004: Wall2FrontPlane
+    4300006: Wall1FrontPlane
+    4300008: Wall2
+    4300010: Wall3
+    4300012: Wall1
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Byggnad1Del1
-    second: {fileID: 2100000, guid: e207a3e09abd21440bb45026fffc6049, type: 2}
+      name: Byggnad2Del1
+    second: {fileID: 2100000, guid: 2c1dd5b0c3c4c3a4fab513a4f946eae6, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Byggnad1Del2
-    second: {fileID: 2100000, guid: 728481d58e0e7834483c0751b8dbe841, type: 2}
+      name: Byggnad2Del2
+    second: {fileID: 2100000, guid: 5c629ccbffc5b004886ceec8d885ba33, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Byggnad1Del2Front
-    second: {fileID: 2100000, guid: 728481d58e0e7834483c0751b8dbe841, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Byggnad1Del3
-    second: {fileID: 2100000, guid: bd999db7693091f4b89d5e3109b04dae, type: 2}
+      name: Byggnad2Del3
+    second: {fileID: 2100000, guid: da257ff6148c4584c9e7880397836762, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: No Name
-    second: {fileID: 2100000, guid: 49220ff9a9e2f084cb9094c333289848, type: 2}
+    second: {fileID: 2100000, guid: ce66f59d31464cd468c710bcba8c092c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
