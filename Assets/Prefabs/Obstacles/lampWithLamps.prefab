@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4707342747311150}
   m_Layer: 0
-  m_Name: lambWithLamps
+  m_Name: lampWithLamps
   m_TagString: Foreground Static
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
