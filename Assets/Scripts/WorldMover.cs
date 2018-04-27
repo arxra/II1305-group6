@@ -1,59 +1,92 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldMover : MonoBehaviour {
 
-  [Tooltip("Gameobjects with this tag will be moved by this script")]
-    public string AffectedTag; 
-
-  [Tooltip("A normalized directional vector pointing in the direction that the world should move")]
+    public Transform BackgroundStart, BackgroundStop;
+    
+    [Tooltip("A normalized directional vector pointing in the direction that the world should move")]
     public Vector3 MovementDirection;
 
-  [Tooltip("The magnitude of the movement")]
-    public float Magnitude;
 
-  [Tooltip("Limits the maximum speed of the world")]
+    [Tooltip("The acceleration of the movement [m/s^2]")]
+    public float Acceleration;
+
+    [Tooltip("Limits the maximum speed of the world [m/s]")]
     public float MaxSpeed;
-  private float minSpeed;
 
-  [Tooltip("Curretn moving speed")]
-    public float currentSpeed;
+    public bool IsKill;
 
-  private List<GameObject> targets; 
+    private float currentSpeed;
 
-  // Use this for initialization
-  void Start () {
-    MaxSpeed = 50;
-    minSpeed = 25;
+    private GameObject partA, partB;
 
-    targets = new List<GameObject>(GameObject.FindGameObjectsWithTag(AffectedTag));
-  }
+    private Vector3 posA, posB;
 
-  // Update is called once per frame
-  void Update () {
-    Magnitude = Time.deltaTime/10;
-    currentSpeed += Magnitude;
-    if ( currentSpeed > MaxSpeed )
-      currentSpeed = MaxSpeed;
-    else if (currentSpeed < minSpeed)
-      currentSpeed = minSpeed;
+    // Use this for initialization
+    void Start () {
+        currentSpeed = 0f;
 
-    // Moving objects
-    // ##############
+        partA = GameObject.Find("Part A");
+        partB = GameObject.Find("Part B");
 
-    foreach(GameObject target in targets) {
-      Rigidbody body = target.GetComponent<Rigidbody>();			
-
-      if (body.velocity.magnitude < currentSpeed)
-        body.velocity = MovementDirection * currentSpeed;
+        posA = partA.transform.position;
+        posB = partB.transform.position;
     }
 
-    // Endless road
-    // ############
+  // Update is called once per frame
+    void Update () {
+        if (IsKill && currentSpeed != 0){
+            if (currentSpeed > 0)
+                currentSpeed *= -1f;
 
-    Transform transf = gameObject.GetComponent<Transform>();
+            if (Mathf.Abs(currentSpeed) > 1f)
+                currentSpeed *= 0.5f;
+            else
+                currentSpeed = 0f;
+        }
+        else 
+            currentSpeed = Mathf.Clamp(currentSpeed + Acceleration * Time.deltaTime, 0f, MaxSpeed);    
+        
 
-    if (transf.position.magnitude > 10)
-      transf.SetPositionAndRotation(Vector3.zero, transf.rotation);		
-  }
+        Vector3 offset = MovementDirection * currentSpeed * Time.deltaTime;
+
+        // Foreground objects
+        // ##################
+
+        foreach(GameObject target in ObjectFilter.EntitiesWithTags(ObjectFilter.Tag.Foreground)) 
+            target.transform.position += offset;
+
+
+        // Background objects
+        // ##################
+
+        partA.transform.position += offset;
+        partB.transform.position += offset;
+
+        // Switch the positioning of part A and B
+        // ######################################
+        
+        if (partA.transform.Find("End").transform.position.z <= 0){
+            
+            partA.transform.position = posB;
+            partB.transform.position = posA;
+
+            var tmp = partA;
+            partA = partB;
+            partB = tmp;
+        }
+    }
+
+    public float GetTotalDistanceMoved() {
+        float timeToReachMax = MaxSpeed / Acceleration;
+ 
+        return currentSpeed / 2f * timeToReachMax + MaxSpeed * (Time.time - timeToReachMax);
+        //     --------- acceleration -----------   -------------- constant ----------------
+    }
+
+    public float GetCurrentSpeed() {
+        return currentSpeed;
+    }
 }

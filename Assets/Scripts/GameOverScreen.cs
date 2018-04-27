@@ -6,22 +6,23 @@ using UnityEngine.UI;
 
 public class GameOverScreen : MonoBehaviour
 {
-    
-    GameObject[] gameoverObjects;
+
+    public GameOverManager go;
     private GameObject[] Obstical;
     GameObject[] pauseObjects;
     public bool alive = true;
-    
+    Animator anim;
+
+    private WorldMover worldMover;
     
     void Start()
     {
-       
+        
         Time.timeScale = 1;
-        gameoverObjects = GameObject.FindGameObjectsWithTag("ShowOnGameOver");
         pauseObjects = GameObject.FindGameObjectsWithTag("Pause");
         alive = true;
-        hideGameOver();
         hidePause();
+        worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
 
     }
 
@@ -41,28 +42,20 @@ public class GameOverScreen : MonoBehaviour
                 hidePause();
             }
 
+            worldMover.IsKill = false;
         }
     }
-    void OnCollisionEnter(Collision col)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (col.gameObject.tag=="Obstacle")
+        if (collision.gameObject.tag.Equals("Obstacle"))
         {
             alive = false;
-            Time.timeScale = 0;
-            showGameOver();
+            go.GetComponent<GameOverManager>().GameOver();
+            worldMover.IsKill = true;
         }
     }
-   
-    public void hideGameOver()
-    {
-        foreach (GameObject g in gameoverObjects)
-            g.SetActive(false);
-    }
-    public void showGameOver()
-    {
-        foreach (GameObject g in gameoverObjects)
-            g.SetActive(true);
-    }
+
+
     public void hidePause()
     {
         foreach (GameObject g in pauseObjects)

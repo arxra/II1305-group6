@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,11 +27,13 @@ public class PlayerControl : MonoBehaviour {
     public float SlideTime;
 
     [Tooltip("The player's distance to the origin")]
-    public float GroundLevel;
+    public float GroundLevelMargin;
 
-    private Transform transf;
+    [Tooltip("Reference to the camera")]
+    public Transform CameraReference;
     private BoxCollider collider;
     private bool isGrounded;
+    private bool isJumping;
     private float laneLockingTimeout;
     private int currentLane;
     private Vector3 laneMovementDirection;
@@ -38,24 +41,59 @@ public class PlayerControl : MonoBehaviour {
     private float slidingTimer;
     private bool slideFromAir;
     private float verticalVelocity;
+    private Animator animator;
 
     private TouchPlot plot;
+
+    private WorldMover worldMover;
+
+    private float distanceBetweenEachLane;
+
+    private Quaternion enforcedRotation;
 
     // Use this for initialization
 
     void Start(){
-        transf  = this.gameObject.GetComponent<Transform>();
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
         collider = this.gameObject.GetComponent<BoxCollider>();
         plot = new TouchPlot();
+        worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
+        animator = GetComponent<Animator>();
+
+        Func<int, int, float>  calcDistanceBetweenLane = (l1, l2) => Mathf.Abs(
+            LaneOriginPoints.transform.GetChild(l2).transform.position.x - 
+            LaneOriginPoints.transform.GetChild(l1).transform.position.x
+        );
+
+        for(int i = 1; i < LaneOriginPoints.transform.childCount; i++){
+            if (i < 2)
+                distanceBetweenEachLane = calcDistanceBetweenLane(i - 1, i);
+            else if(Debug.isDebugBuild)
+                Debug.Assert(calcDistanceBetweenLane(i - 1, i) == distanceBetweenEachLane, "The distance between lanes must consistent");
+        }
     }
 
     // Update is called once per frame
     void Update () {
-        isGrounded = Physics.Raycast(new Ray(transf.position + collider.center, Vector3.down), getDistanceToCharacterBottom() + GroundLevel);
+        enforcedRotation = transform.rotation;
+
+        // Stay on the floor
+        // #################
         
+        RaycastHit hit;
+        float distanceToGround = GroundLevelMargin + getEllipsRadius();
+        isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
+        
+        if (isGrounded) 
+            transform.position = new Vector3(
+                transform.position.x, 
+                Mathf.Max(hit.point.y + distanceToGround, transform.position.y), 
+                transform.position.z
+            );
+        
+
         // Touch & Keyboard Input
         // ######################
 
@@ -72,90 +110,115 @@ public class PlayerControl : MonoBehaviour {
             moveToLane(currentLane - 1);
         else if (pressingRight)
             moveToLane(currentLane + 1);
-        
+
+        Vector3 euler = transform.rotation.eulerAngles;
         if (laneMovementDirection != Vector3.zero) {
-            // The following deals with the x-dimension:
-            float destination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
-            float speed = MovementMagnitudeFactor * Mathf.Abs(destination - transf.position.x);
-        
-            transf.position += laneMovementDirection * speed * Time.deltaTime;
-        }
-        else if (laneLockingTimeout <= 0) {
-            foreach(Transform laneTransf in LaneOriginPoints.transform) {
-                if (laneLockingTimeout <= 0 && Mathf.Abs(transf.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  {
-                    transf.position = new Vector3(laneTransf.position.x, transf.position.y, transf.position.z);
-                    laneMovementDirection = Vector3.zero;
+            float xDestination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
+            float xSpeed = Mathf.Min(MovementMagnitudeFactor * Mathf.Abs(xDestination - transform.position.x), 100f);
+            
+            // This will make the player look in the direction of the lane that the player moves towards:
+            euler.y = laneMovementDirection.x * 70 * Mathf.Clamp(xSpeed / 10f, 0f, 1f);    
+
+            // This will do the actual move of the player in the direction of the next lane:
+            transform.position += laneMovementDirection * xSpeed * Time.deltaTime;
+
+            if (laneLockingTimeout <= 0) {
+                foreach(Transform laneTransf in LaneOriginPoints.transform) {
+                    if (laneLockingTimeout <= 0 && Mathf.Abs(transform.position.x - laneTransf.position.x) < CloseEnoughToLaneDistance)  
+                        transform.position = new Vector3(laneTransf.position.x, transform.position.y, transform.position.z);
                 }
+
+                laneMovementDirection = Vector3.zero;
             }
         }
+        else {
+            euler.y = 0f;
+        }
+
+        euler.x += getTemporaryAngleDelta(euler.x, SlidingAngle, ref isSliding, slidingTimer > 0);
+        enforcedRotation = Quaternion.Euler(euler);
 
         // Jumping & gravity calculation
         // #############################
         
-
         if (isGrounded){
             // On the ground:
             
+            isJumping = false;
+            animator.ResetTrigger("Jump");
+
             if (pressingUp) {
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
                 slideFromAir = false;
+                isJumping = true;
+                animator.SetTrigger("Jump");
             }
             else{
                 if (pressingDown || slideFromAir){
                     slidingTimer = SlideTime;
                     slideFromAir = false;
+                    enforcedRotation = Quaternion.identity;
                 }
 
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
-            }
+            }    
+
+            if (!isJumping && !isSliding)
+                enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
         }
         else {
             // In the air:
 
             if(pressingDown) {
-                verticalVelocity = -JumpMagnitudeFactor;
+                verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
+                animator.ResetTrigger("Jump");
             }
             else
                 verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
         }
 
-
-        transf.Rotate(getSlidingAngleDelta(), 0f, 0f);
-        transf.position += Vector3.up * verticalVelocity * Time.deltaTime;
+        // Apply the new transformations
+        transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
         slidingTimer -= Time.deltaTime;
-
-        transf.position = new Vector3(
-            transf.position.x, 
-            Mathf.Max(transf.position.y, GroundLevel), 
-            transf.position.z
-        );
 	}
 
-    public float getSlidingAngleDelta() {
-        float currentClockwiseAngle = transf.eulerAngles.x;
+    void LateUpdate() {
+        if (isSliding || !isJumping || slideFromAir)
+            transform.rotation = enforcedRotation;
+        
+        if (!isJumping) {
+            CameraReference.position = new Vector3(
+                CameraReference.position.x, 
+                Mathf.Max(transform.position.y, 0), 
+                CameraReference.position.z
+            );
+        }
+    }
+
+    public float getTemporaryAngleDelta(float currentClockwiseAngle, float requestedClockwiseAngle, ref bool activeMotion, bool keepInNewPosition) {
         float a = 0, b = 0;
         const float speedFactor = 10f;
-
-        if (slidingTimer > 0f) {
-            a = (SlidingAngle - currentClockwiseAngle) * Time.deltaTime * speedFactor;
-            b = (SlidingAngle - currentClockwiseAngle - 360) * Time.deltaTime * speedFactor;
-            isSliding = true; 
+        
+        if (keepInNewPosition) {
+            a = (requestedClockwiseAngle - currentClockwiseAngle) * Time.deltaTime * speedFactor;
+            b = (requestedClockwiseAngle - currentClockwiseAngle - 360) * Time.deltaTime * speedFactor;
+            activeMotion = true; 
         }
-        else if (isSliding) {     
+        else if (activeMotion) {     
             a = -currentClockwiseAngle;
             b = 360 - currentClockwiseAngle;
-            isSliding = Mathf.Abs(currentClockwiseAngle) > 1f;
+            activeMotion = Mathf.Abs(currentClockwiseAngle) > 10f && Mathf.Abs(360 - currentClockwiseAngle) > 10f;
 
-            if (isSliding){
+            if (activeMotion){
                 a *= Time.deltaTime * speedFactor;
                 b *= Time.deltaTime * speedFactor;
-            }
+            }    
         }
-
+        
         return (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
     }
 
@@ -164,14 +227,29 @@ public class PlayerControl : MonoBehaviour {
         
         if (currentLane != validNewLane) {
             laneMovementDirection = (validNewLane < currentLane ? Vector3.left : Vector3.right);
+
+            if (Physics.Raycast(new Ray(transform.position + collider.center, laneMovementDirection), distanceBetweenEachLane)) {
+                // Obstacle in the way
+                laneMovementDirection = Vector3.zero;
+                return;
+            }
+
+            laneLockingTimeout = 0.5f;
             currentLane = validNewLane;   
         }
     }
 
-    public float getDistanceToCharacterBottom() {
-        return Mathf.Sqrt(
-            Mathf.Pow(collider.size.y * Mathf.Sin(transf.rotation.eulerAngles.x) / 2, 2) +
-            Mathf.Pow(collider.size.y * Mathf.Cos(transf.rotation.eulerAngles.x) / 2, 2)
+    private float getEllipsRadius() {
+        float a = collider.size.y / 2;
+        float b = collider.size.z / 2;
+        float angle = Mathf.Deg2Rad * transform.rotation.eulerAngles.x;
+
+        return (
+            a * b / 
+            Mathf.Sqrt(
+                a * a * Mathf.Pow(Mathf.Sin(angle), 2f) + 
+                b * b * Mathf.Pow(Mathf.Cos(angle), 2f)
+            )
         );
     }
 }
