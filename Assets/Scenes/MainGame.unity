@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf89498c495d4ecba1f44ee53620121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AutoSpawnInterval: 2
+  AutoSpawnInterval: 1
   SpawnOverrides:
   - Candidate: {fileID: 910404526}
     Popularity: 10
@@ -1243,7 +1243,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -1329,6 +1329,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!136 &177744467
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 177744460}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &178730605
 GameObject:
   m_ObjectHideFlags: 0
@@ -12220,7 +12233,13 @@ Prefab:
       propertyPath: m_Center.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 65784918103500174, guid: 73917f1a39b3c17478ac1cf00393eb1e,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65784918103500174, guid: 73917f1a39b3c17478ac1cf00393eb1e, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 73917f1a39b3c17478ac1cf00393eb1e, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2102937883
