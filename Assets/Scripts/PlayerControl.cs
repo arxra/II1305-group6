@@ -31,7 +31,7 @@ public class PlayerControl : MonoBehaviour {
 
     [Tooltip("Reference to the camera")]
     public Transform CameraReference;
-    private BoxCollider collider;
+    private CapsuleCollider collider;
     private bool isGrounded;
     private bool isJumping;
     private float laneLockingTimeout;
@@ -57,7 +57,7 @@ public class PlayerControl : MonoBehaviour {
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
-        collider = this.gameObject.GetComponent<BoxCollider>();
+        collider = this.gameObject.GetComponent<CapsuleCollider>();
         plot = new TouchPlot();
         worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
         animator = GetComponent<Animator>();
@@ -240,8 +240,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private float getEllipsRadius() {
-        float a = collider.size.y / 2;
-        float b = collider.size.z / 2;
+        float a = collider.height / 2;
+        float b = collider.radius;
         float angle = Mathf.Deg2Rad * transform.rotation.eulerAngles.x;
 
         return (
