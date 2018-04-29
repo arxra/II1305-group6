@@ -4,9 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
+	void Start(){
+		FindObjectOfType<AudioManager> ().play ("Menu");
+	}
 
 	public void PlayGame(){
 		SceneManager.LoadScene (1);
+		FindObjectOfType<AudioManager> ().mute ("Menu");
+
+
 	}
 
 	public void QuitGame(){
