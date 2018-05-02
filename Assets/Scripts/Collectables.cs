@@ -12,7 +12,7 @@ public class Collectables : MonoBehaviour {
     public float _mult;
 
   [Tooltip("Food factor, for boost and currency")]
-    public float _sizeMultiplier;
+    public int _sizeMultiplier;
 
   void Update() {
     // Rotate the object around its local X axis at 1 degree per second
