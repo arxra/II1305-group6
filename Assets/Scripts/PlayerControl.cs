@@ -84,14 +84,18 @@ public class PlayerControl : MonoBehaviour {
         
         RaycastHit hit;
         float distanceToGround = GroundLevelMargin + getEllipsRadius();
+
         isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
-        
-        if (isGrounded) 
+
+        if (isGrounded)
+        {
+            animator.SetTrigger("Ground");
             transform.position = new Vector3(
-                transform.position.x, 
-                Mathf.Max(hit.point.y + distanceToGround, transform.position.y), 
-                transform.position.z
-            );
+                    transform.position.x,
+                    Mathf.Max(hit.point.y + distanceToGround, transform.position.y),
+                    transform.position.z
+                );
+        }
         
 
         // Touch & Keyboard Input
@@ -101,15 +105,22 @@ public class PlayerControl : MonoBehaviour {
         bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
              pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
              pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
-             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;  
+             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;
 
         // Lane movement
         // #############
 
         if (pressingLeft)
+        {
+            animator.SetTrigger("Left");
             moveToLane(currentLane - 1);
+
+        }
         else if (pressingRight)
+        {
+            animator.SetTrigger("Right");
             moveToLane(currentLane + 1);
+        }
 
         Vector3 euler = transform.rotation.eulerAngles;
         if (laneMovementDirection != Vector3.zero) {
@@ -145,9 +156,10 @@ public class PlayerControl : MonoBehaviour {
             // On the ground:
             
             isJumping = false;
-            animator.ResetTrigger("Jump");
+            
 
             if (pressingUp) {
+                animator.ResetTrigger("Ground");
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
                 slideFromAir = false;
@@ -159,21 +171,25 @@ public class PlayerControl : MonoBehaviour {
                     slidingTimer = SlideTime;
                     slideFromAir = false;
                     enforcedRotation = Quaternion.identity;
+                    animator.SetTrigger("Slide");
                 }
 
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
-            }    
+            }
 
-            if (!isJumping && !isSliding)
-                enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
+            if (!isJumping && !isSliding) ;
+                
+               // enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
         }
         else {
             // In the air:
-
-            if(pressingDown) {
+            animator.ResetTrigger("Left");
+            animator.ResetTrigger("Right");
+            if (pressingDown) {
                 verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
-                animator.ResetTrigger("Jump");
+                
+
             }
             else
                 verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
@@ -187,9 +203,13 @@ public class PlayerControl : MonoBehaviour {
 	}
 
     void LateUpdate() {
-        if (isSliding || !isJumping || slideFromAir)
-            transform.rotation = enforcedRotation;
-        
+        if (isSliding || slideFromAir) {
+            animator.ResetTrigger("Left");
+            animator.ResetTrigger("Right");
+
+        }
+        //    transform.rotation = enforcedRotation;
+
         if (!isJumping) {
             CameraReference.position = new Vector3(
                 CameraReference.position.x, 
