@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Player behaviour 
 public class PlayerControl : MonoBehaviour {
 
     [Tooltip("A gameobject containing child gameobjects tranformed at the x-value of each lane respectively")]
@@ -51,7 +52,6 @@ public class PlayerControl : MonoBehaviour {
 
     private Quaternion enforcedRotation;
 
-    // Use this for initialization
 
     void Start(){
         laneMovementDirection = Vector3.zero;
@@ -75,17 +75,19 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
+    
     void Update () {
+
+		//Save rotation to override animator
         enforcedRotation = transform.rotation;
 
-        // Stay on the floor
-        // #################
-        
+		/***********************************************************************************************************/ 
+		// Stay on the floor
         RaycastHit hit;
         float distanceToGround = GroundLevelMargin + getEllipsRadius();
         isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
         
+		//Prevent falling through ground level
         if (isGrounded) 
             transform.position = new Vector3(
                 transform.position.x, 
@@ -93,34 +95,29 @@ public class PlayerControl : MonoBehaviour {
                 transform.position.z
             );
         
-        //var upperHitPoint = AntiRaycast(transform.position, Vector3.up, 5f);
-        //if (upperHitPoint != Vector3.zero)
-         //   transform.position = upperHitPoint;
-
+		/***********************************************************************************************************/
         // Touch & Keyboard Input
-        // ######################
-
         TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
         bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
              pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
              pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
              pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;  
 
+		/************************************************************************************************************/
         // Lane movement
-        // #############
-
         if (pressingLeft)
             moveToLane(currentLane - 1);
         else if (pressingRight)
             moveToLane(currentLane + 1);
 
-        Vector3 euler = transform.rotation.eulerAngles;
+		//Change lanes
+        Vector3 degrees = transform.rotation.eulerAngles;
         if (laneMovementDirection != Vector3.zero) {
             float xDestination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
             float xSpeed = Mathf.Min(MovementMagnitudeFactor * Mathf.Abs(xDestination - transform.position.x), 100f);
             
             // This will make the player look in the direction of the lane that the player moves towards:
-            euler.y = laneMovementDirection.x * 70 * Mathf.Clamp(xSpeed / 10f, 0f, 1f);    
+            degrees.y = laneMovementDirection.x * 70 * Mathf.Clamp(xSpeed / 10f, 0f, 1f);    
 
             // This will do the actual move of the player in the direction of the next lane:
             transform.position += laneMovementDirection * xSpeed * Time.deltaTime;
@@ -135,21 +132,23 @@ public class PlayerControl : MonoBehaviour {
             }
         }
         else {
-            euler.y = 0f;
+            degrees.y = 0f;
         }
 
-        euler.x += getTemporaryAngleDelta(euler.x, SlidingAngle, ref isSliding, slidingTimer > 0);
-        enforcedRotation = Quaternion.Euler(euler);
+		//Gradual change in angle for sliding motion
+        degrees.x += getTemporaryAngleDelta(degrees.x, SlidingAngle, ref isSliding, slidingTimer > 0);
+        enforcedRotation = Quaternion.Euler(degrees);
 
-        // Jumping & gravity calculation
-        // #############################
-        
+        /***************************************************************************************************************/
+		// Jumping & gravity calculation
+ 
         if (isGrounded){
             // On the ground:
             
             isJumping = false;
             animator.ResetTrigger("Jump");
 
+			//Jumping 
             if (pressingUp) {
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
@@ -158,6 +157,8 @@ public class PlayerControl : MonoBehaviour {
                 animator.SetTrigger("Jump");
             }
             else{
+
+				//Sliding 
                 if (pressingDown || slideFromAir){
                     slidingTimer = SlideTime;
                     slideFromAir = false;
@@ -173,6 +174,7 @@ public class PlayerControl : MonoBehaviour {
         else {
             // In the air:
 
+			//Slide from jumping
             if(pressingDown) {
                 verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
@@ -182,7 +184,7 @@ public class PlayerControl : MonoBehaviour {
                 verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
         }
 
-        // Apply the new transformations
+        // Apply new transformations
         transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
@@ -193,6 +195,7 @@ public class PlayerControl : MonoBehaviour {
         if (isSliding || !isJumping || slideFromAir)
             transform.rotation = enforcedRotation;
         
+		//Camera only raised when on upper level
         if (!isJumping) {
             CameraReference.position = new Vector3(
                 CameraReference.position.x, 
@@ -202,6 +205,7 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+	//Retrieve angle for movement
     public float getTemporaryAngleDelta(float currentClockwiseAngle, float requestedClockwiseAngle, ref bool activeMotion, bool keepInNewPosition) {
         float a = 0, b = 0;
         const float speedFactor = 10f;
@@ -225,6 +229,7 @@ public class PlayerControl : MonoBehaviour {
         return (Mathf.Abs(a) < Mathf.Abs(b) ? a : b);
     }
 
+	//Check if lane free and if so move 
     public void moveToLane(int lane) {
         int validNewLane = Mathf.Clamp(lane, 0, LaneOriginPoints.transform.childCount - 1);
         

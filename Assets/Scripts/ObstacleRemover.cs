@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//Removes the parent of obstacle
 public class ObstacleRemover : MonoBehaviour {
 	public ObjectFilter.Tag _filterTag = ObjectFilter.Tag.Foreground;
 

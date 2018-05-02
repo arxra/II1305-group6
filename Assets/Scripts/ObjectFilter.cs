@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Entity tag system 
 public static class ObjectFilter {
 	public enum Tag {
 		Foreground,
@@ -12,13 +13,13 @@ public static class ObjectFilter {
 		Static,
 		Collectable
 	}
-
-
-
+		
+	//Checks entity's tags
 	public static bool EntityHasTags(GameObject entity, params Tag[] tags) {
 		return new List<GameObject>(EntitiesWithTags(tags)).Contains(entity);
 	}
 
+	//Checks entity's relatives tags 
 	public static GameObject RelativesHasTags(GameObject entity, params Tag[] tags) {
 		List<GameObject> entities = new List<GameObject>(EntitiesWithTags(tags));
 

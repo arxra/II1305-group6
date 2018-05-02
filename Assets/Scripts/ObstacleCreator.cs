@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Master of spawn policies
+
 public class ObstacleCreator : MonoBehaviour {
 	[Tooltip("The time between each obstacle spawn [seconds]")]
 	public float AutoSpawnInterval = 1;
@@ -13,16 +15,18 @@ public class ObstacleCreator : MonoBehaviour {
 	private float timeout;
 	private int lastLane;
 
-	// Use this for initialization
+
 	void Start () {
 		policies = new List<SpawnPolicy>();
 		timeout = AutoSpawnInterval;	
 		totalPopularity = 0;
 		lastLane = 1;
 
+		//Scan candidates
 		foreach(Transform transf in transform.Find("Candidates").transform) {
 			SpawnPolicy policy = transf.GetComponent<SpawnPolicy>();
 
+			//Create default value if none preexisting 
 			if (policy == null){
 				transf.gameObject.AddComponent(typeof(SpawnPolicy));
 				policy = transf.GetComponent<SpawnPolicy>();
@@ -33,8 +37,10 @@ public class ObstacleCreator : MonoBehaviour {
 		}
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
+
+		//Sets continuous spawning intervals
 		if (timeout > 0) {
 			timeout -= Time.deltaTime;
 			return;
@@ -42,15 +48,20 @@ public class ObstacleCreator : MonoBehaviour {
 		else
 			timeout = AutoSpawnInterval;
 
+		//Check if spawned to spawn 
 		bool hasSpawned = false;
 		while(!hasSpawned) {
 			SpawnPolicy session = SpawnNow();
 			
 			if (session != null){
-				hasSpawned = session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane));
+				hasSpawned = session.InstantiateAt(
+					position: session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), 
+					lastLane: ref lastLane
+				));
 
 				if (!hasSpawned){
-					// Something that no longer should spawn
+					
+					// Stop spawning this object
 					policies.Remove(session);
 					totalPopularity -= session.Popularity;
 				}
@@ -63,6 +74,7 @@ public class ObstacleCreator : MonoBehaviour {
 		}
 	}
 
+	//Returns a randomly selected gameobject to spawn 
 	public SpawnPolicy SpawnNow() {
 		int rand = Random.Range(0, totalPopularity);
 		int pos = 0;
@@ -74,4 +86,5 @@ public class ObstacleCreator : MonoBehaviour {
 
 		return null;
 	}
+
 }
