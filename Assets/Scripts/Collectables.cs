@@ -11,7 +11,7 @@ public class Collectables : MonoBehaviour {
   [Tooltip("Multiplier value")]
     public float _mult;
 
-  [Tooltip("Size modifier in x'times scale")]
+  [Tooltip("Food factor, for boost and currency")]
     public float _sizeMultiplier;
 
   void Update() {
