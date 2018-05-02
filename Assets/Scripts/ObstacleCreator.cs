@@ -42,16 +42,24 @@ public class ObstacleCreator : MonoBehaviour {
 		else
 			timeout = AutoSpawnInterval;
 
-		SpawnPolicy session = SpawnNow();
-		if (session != null){
-			if (!session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane))){
-				policies.Remove(session);
-				totalPopularity -= session.Popularity;
+		bool hasSpawned = false;
+		while(!hasSpawned) {
+			SpawnPolicy session = SpawnNow();
+			
+			if (session != null){
+				hasSpawned = session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane));
+
+				if (!hasSpawned){
+					// Something that no longer should spawn
+					policies.Remove(session);
+					totalPopularity -= session.Popularity;
+				}
 			}
-		}
-		else {
-			Debug.LogWarning("ObstacleCreator: Disabling since there are no more obstacles left to spawn. Is this intentional?");
-			enabled = false;
+			else {
+				Debug.LogWarning("ObstacleCreator: Disabling since there are no more obstacles left to spawn. Is this intentional?");
+				enabled = false;
+				return;
+			}
 		}
 	}
 
