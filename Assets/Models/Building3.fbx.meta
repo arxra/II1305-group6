@@ -1,0 +1,148 @@
+fileFormatVersion: 2
+guid: b609c51bd0fce2a4fa14b69d47bfb6dd
+timeCreated: 1525265389
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Wall1
+    100004: Wall1FrontPlane
+    100006: Wall2
+    100008: Wall2FrontPlane
+    100010: Wall3
+    100012: Wall3FrontPlane
+    100014: WallBackPlane
+    400000: //RootNode
+    400002: Wall1
+    400004: Wall1FrontPlane
+    400006: Wall2
+    400008: Wall2FrontPlane
+    400010: Wall3
+    400012: Wall3FrontPlane
+    400014: WallBackPlane
+    2100000: No Name
+    2100002: Byggnad3Del3
+    2100004: Byggnad3Del2
+    2100006: Byggnad3Del1
+    2300000: Wall1
+    2300002: Wall1FrontPlane
+    2300004: Wall2
+    2300006: Wall2FrontPlane
+    2300008: Wall3
+    2300010: Wall3FrontPlane
+    2300012: WallBackPlane
+    3300000: Wall1
+    3300002: Wall1FrontPlane
+    3300004: Wall2
+    3300006: Wall2FrontPlane
+    3300008: Wall3
+    3300010: Wall3FrontPlane
+    3300012: WallBackPlane
+    4300000: WallBackPlane
+    4300002: Wall3FrontPlane
+    4300004: Wall2FrontPlane
+    4300006: Wall1FrontPlane
+    4300008: Wall2
+    4300010: Wall3
+    4300012: Wall1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Byggnad3Del1
+    second: {fileID: 2100000, guid: e7c4adfd99d0bb04a883f27655a40c14, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Byggnad3Del2
+    second: {fileID: 2100000, guid: 2460740f36cdecf46a00cf78d0731e96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Byggnad3Del3
+    second: {fileID: 2100000, guid: e798afb5b3a382148bacc31165949e5f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: e548e051a2c5b9b409d5f2bfe88ba34d, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

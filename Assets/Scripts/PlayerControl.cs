@@ -32,7 +32,7 @@ public class PlayerControl : MonoBehaviour {
 
     [Tooltip("Reference to the camera")]
     public Transform CameraReference;
-    private BoxCollider collider;
+    private CapsuleCollider collider;
     private bool isGrounded;
     private bool isJumping;
     private float laneLockingTimeout;
@@ -57,7 +57,7 @@ public class PlayerControl : MonoBehaviour {
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
-        collider = this.gameObject.GetComponent<BoxCollider>();
+        collider = this.gameObject.GetComponent<CapsuleCollider>();
         plot = new TouchPlot();
         worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
         animator = GetComponent<Animator>();
@@ -85,15 +85,19 @@ public class PlayerControl : MonoBehaviour {
 		// Stay on the floor
         RaycastHit hit;
         float distanceToGround = GroundLevelMargin + getEllipsRadius();
+
         isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
-        
+
 		//Prevent falling through ground level
-        if (isGrounded) 
+        if (isGrounded)
+        {
+            animator.SetTrigger("Ground");
             transform.position = new Vector3(
-                transform.position.x, 
-                Mathf.Max(hit.point.y + distanceToGround, transform.position.y), 
-                transform.position.z
-            );
+                    transform.position.x,
+                    Mathf.Max(hit.point.y + distanceToGround, transform.position.y),
+                    transform.position.z
+                );
+        }
         
 		/***********************************************************************************************************/
         // Touch & Keyboard Input
@@ -101,14 +105,21 @@ public class PlayerControl : MonoBehaviour {
         bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
              pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
              pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
-             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;  
+             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;
 
 		/************************************************************************************************************/
         // Lane movement
         if (pressingLeft)
+        {
+            animator.SetTrigger("Left");
             moveToLane(currentLane - 1);
+
+        }
         else if (pressingRight)
+        {
+            animator.SetTrigger("Right");
             moveToLane(currentLane + 1);
+        }
 
 		//Change lanes
         Vector3 degrees = transform.rotation.eulerAngles;
@@ -146,10 +157,11 @@ public class PlayerControl : MonoBehaviour {
             // On the ground:
             
             isJumping = false;
-            animator.ResetTrigger("Jump");
+            
 
 			//Jumping 
             if (pressingUp) {
+                animator.ResetTrigger("Ground");
                 verticalVelocity = JumpMagnitudeFactor;
                 slidingTimer = 0f;
                 slideFromAir = false;
@@ -163,22 +175,25 @@ public class PlayerControl : MonoBehaviour {
                     slidingTimer = SlideTime;
                     slideFromAir = false;
                     enforcedRotation = Quaternion.identity;
+                    animator.SetTrigger("Slide");
                 }
 
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
-            }    
+            }
 
-            if (!isJumping && !isSliding)
-                enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
+            if (!isJumping && !isSliding) ;
+                
+               // enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
         }
         else {
             // In the air:
-
-			//Slide from jumping
-            if(pressingDown) {
+            animator.ResetTrigger("Left");
+            animator.ResetTrigger("Right");
+            if (pressingDown) {
                 verticalVelocity = -4f * JumpMagnitudeFactor;
                 slideFromAir = true;
-                animator.ResetTrigger("Jump");
+                
+
             }
             else
                 verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
@@ -192,10 +207,13 @@ public class PlayerControl : MonoBehaviour {
 	}
 
     void LateUpdate() {
-        if (isSliding || !isJumping || slideFromAir)
-            transform.rotation = enforcedRotation;
-        
-		//Camera only raised when on upper level
+
+        if (isSliding || slideFromAir) {
+            animator.ResetTrigger("Left");
+            animator.ResetTrigger("Right");
+
+        }
+        //    transform.rotation = enforcedRotation;
         if (!isJumping) {
             CameraReference.position = new Vector3(
                 CameraReference.position.x, 
@@ -248,8 +266,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private float getEllipsRadius() {
-        float a = collider.size.y / 2;
-        float b = collider.size.z / 2;
+        float a = collider.height / 2;
+        float b = collider.radius;
         float angle = Mathf.Deg2Rad * transform.rotation.eulerAngles.x;
 
         return (
