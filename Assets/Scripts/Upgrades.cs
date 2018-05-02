@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//Upgrade behaviour
 public class Upgrades : MonoBehaviour {
 
   [Tooltip("Food currency. Public ONLY for testing purposes.")]
@@ -7,15 +8,13 @@ public class Upgrades : MonoBehaviour {
   public GameOverScreen _gos;
   public Score _sc;
 
-  public void Start() {
-  }
 
   //How much monies?
   public int CurrentCurrency() {
     return _currency;
   }
 
-  //make it rain!
+  //make it rain! (Check if money can be spent)
   public bool SpendMoney(int toBeSpent) {
     if(toBeSpent <= _currency) {
       _currency -= toBeSpent;
