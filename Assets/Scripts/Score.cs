@@ -14,7 +14,8 @@ public class Score : MonoBehaviour {
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
   private WorldMover _mv = new WorldMover();
 
-  private float _foodFactor;
+  private int _foodFactor;
+  private int _totalFoodForRun;
 
   public class MulStruct {
     public MulStruct (float t, float m, int location){
@@ -60,9 +61,6 @@ public class Score : MonoBehaviour {
       if (score > oldHighScore)
         PlayerPrefs.SetInt("highScore", score);
           highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-          
-          
-          
           updateText();
   }
 
@@ -72,9 +70,16 @@ public class Score : MonoBehaviour {
   }
 
   public float SizeMultiplier(){
-    float tmp = _foodFactor;
-    _foodFactor = 0f;
+    int tmp = _foodFactor;
+    _foodFactor = 0;
     return tmp;
+  }
+
+  //Use only when game's lost
+  public int RunsFood() {
+    int tmep = _totalFoodForRun;
+    _totalFoodForRun = 0;
+    return tmep;
   }
 
   void OnTriggerEnter(Collider col){
@@ -83,6 +88,7 @@ public class Score : MonoBehaviour {
       score += pckup.GetComponent<Collectables>().value;
       _multis.Add(_multis.Count, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
       _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
+      _totalFoodForRun += pckup.GetComponent<Collectables>()._sizeMultiplier;
       Destroy(pckup);
     }
   }
