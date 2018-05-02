@@ -17,16 +17,19 @@ public class ObstacleCreator : MonoBehaviour {
 	void Start () {
 		policies = new List<SpawnPolicy>();
 		timeout = AutoSpawnInterval;	
-		totalPopularity = 0;	
-		lastLane = -1;
+		totalPopularity = 0;
+		lastLane = 1;
 
-		foreach(Transform transf in transform.Find("Candidates")) {
-			var policy = transf.GetComponent<SpawnPolicy>();
+		foreach(Transform transf in transform.Find("Candidates").transform) {
+			SpawnPolicy policy = transf.GetComponent<SpawnPolicy>();
 
-			if (policy == null)
-				policy = new SpawnPolicy(transf.gameObject);
+			if (policy == null){
+				transf.gameObject.AddComponent(typeof(SpawnPolicy));
+				policy = transf.GetComponent<SpawnPolicy>();
+			}
 
 			totalPopularity += policy.Popularity;
+			policies.Add(policy);
 		}
 	}
 	
@@ -39,7 +42,7 @@ public class ObstacleCreator : MonoBehaviour {
 		else
 			timeout = AutoSpawnInterval;
 
-		var session = SpawnNow();
+		SpawnPolicy session = SpawnNow();
 		if (session != null){
 			if (!session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane))){
 				policies.Remove(session);

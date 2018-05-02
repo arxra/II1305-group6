@@ -33,6 +33,10 @@ public class SpawnPolicy : MonoBehaviour {
 		SpawnInLaneC = true;
 	}
 
+	public void Start() {
+		candidate = gameObject;
+	}
+
 	public SpawnPolicy(GameObject candidate, int popularity = 10, int remainingInstances = -1) {
 		this.candidate = candidate;
 		Popularity = popularity;

@@ -93,6 +93,9 @@ public class PlayerControl : MonoBehaviour {
                 transform.position.z
             );
         
+        //var upperHitPoint = AntiRaycast(transform.position, Vector3.up, 5f);
+        //if (upperHitPoint != Vector3.zero)
+         //   transform.position = upperHitPoint;
 
         // Touch & Keyboard Input
         // ######################
@@ -252,4 +255,25 @@ public class PlayerControl : MonoBehaviour {
             )
         );
     }
+
+    
+    public Vector3 AntiRaycast(Vector3 origin, Vector3 direction, float maxLength) {
+        const float margin = 0.1f;
+        float movedLen = 0f;
+
+        if (Physics.CheckBox(origin, new Vector3(margin, margin, margin), Quaternion.identity)) {
+            Vector3 current = origin;
+            while(movedLen < maxLength) {
+                current += direction * margin;
+                movedLen += margin;
+                Debug.Log(movedLen);
+                if (!Physics.CheckBox(current, new Vector3(margin, margin, margin), Quaternion.identity))
+                    return current;
+            }
+        }
+
+        return Vector3.zero;
+    }
 }
+
+
