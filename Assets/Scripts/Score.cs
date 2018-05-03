@@ -8,6 +8,7 @@ public class Score : MonoBehaviour {
     public int score;
   public Text highScore;
   public Text text;
+    public Text Multi;
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
@@ -69,6 +70,7 @@ public class Score : MonoBehaviour {
 
   void updateText()
   {
+        Multi.text = "X" + multiplier;
     text.text = "Score : "+ score ;
   }
 
