@@ -6,11 +6,14 @@ public class Score : MonoBehaviour {
 
   [Tooltip("The current players score")]
     public int score;
-    public Animator anim;
-    private bool TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = false; 
+
+  [Tooltip("Insert upgrade module here")]
+    public Upgrades _upgrades;
+  public Animator anim;
+  private bool TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = false;
   public Text highScore;
   public Text text;
-    public Text MultiText;
+  public Text MultiText;
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
@@ -30,7 +33,7 @@ public class Score : MonoBehaviour {
     public float _mult;
     public int _location;
   }
-  
+
   void Start () {
     _mv = GameObject.Find("WorldMover").GetComponent<WorldMover>();
     alive = true;
@@ -39,12 +42,12 @@ public class Score : MonoBehaviour {
       updateText();
   }
 
-  
+
   void Update () {
     alive = go.GetComponent<GameOverScreen>().alive;
     float scoreUpdate = 0;
 
-		//Tick multiplier  (Multiply by multipliers) 
+    //Tick multiplier  (Multiply by multipliers) 
     multiplier = 1f;
     foreach (MulStruct mul in new Dictionary<int, MulStruct>(_multis).Values) {
       mul._time -= Time.deltaTime;
@@ -62,24 +65,24 @@ public class Score : MonoBehaviour {
           score += Mathf.RoundToInt(scoreUpdate);
       }
 
-		//Update highscore
+    //Update highscore
     int oldHighScore = PlayerPrefs.GetInt("highScore");
-        if (score > oldHighScore)
-        {
-            PlayerPrefs.SetInt("highScore", score);
-            if (!TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed)
-            {
-                anim.SetTrigger("high");
-                TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = true; 
-            }
-        }
-          highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-          updateText();
+      if (score > oldHighScore)
+      {
+        PlayerPrefs.SetInt("highScore", score);
+          if (!TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed)
+          {
+            anim.SetTrigger("high");
+              TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = true; 
+          }
+      }
+    highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
+      updateText();
   }
 
   void updateText()
   {
-        MultiText.text = "X" + multiplier;
+    MultiText.text = "X" + multiplier;
     text.text = "Score : "+ score ;
   }
 
@@ -96,7 +99,7 @@ public class Score : MonoBehaviour {
     return tmep;
   }
 
-	//Pickup collectable, add value and destroy when done
+  //Pickup collectable, add value and destroy when done
   void OnTriggerEnter(Collider col){
     if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
       GameObject pckup = col.gameObject;
