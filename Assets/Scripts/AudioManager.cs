@@ -7,10 +7,10 @@ public class AudioManager : MonoBehaviour {
 
 	public Sound[] music;
 
-
+	MainMenu mainMenuBool;
 
 	void Awake () {
-
+		mainMenuBool = FindObjectOfType<MainMenu> ();
 		// for every track set settings value
 		foreach (Sound s in music) {
 
@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour {
 	}
 
 	void Start(){
-		if (SceneManager.GetActiveScene ().name == "MainGame")
+		if (SceneManager.GetActiveScene ().name == "MainGame" && mainMenuBool.soundOn )
 			play ("Music");
 	}
 
