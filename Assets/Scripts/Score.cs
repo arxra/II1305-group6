@@ -7,10 +7,10 @@ public class Score : MonoBehaviour {
   [Tooltip("The current players score")]
     public int score;
     public Animator anim;
-    private bool highscore = false; 
+    private bool TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed = false; 
   public Text highScore;
   public Text text;
-    public Text Multi;
+    public Text MultiText;
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
@@ -67,10 +67,10 @@ public class Score : MonoBehaviour {
         if (score > oldHighScore)
         {
             PlayerPrefs.SetInt("highScore", score);
-            if (!highscore)
+            if (!TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed)
             {
                 anim.SetTrigger("high");
-                highscore = true; 
+                TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed = true; 
             }
         }
           highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
@@ -79,7 +79,7 @@ public class Score : MonoBehaviour {
 
   void updateText()
   {
-        Multi.text = "X" + multiplier;
+        MultiText.text = "X" + multiplier;
     text.text = "Score : "+ score ;
   }
 
