@@ -7,7 +7,7 @@ public class Score : MonoBehaviour {
   [Tooltip("The current players score")]
     public int score;
     public Animator anim;
-    private bool TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed = false; 
+    private bool TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = false; 
   public Text highScore;
   public Text text;
     public Text MultiText;
@@ -67,10 +67,10 @@ public class Score : MonoBehaviour {
         if (score > oldHighScore)
         {
             PlayerPrefs.SetInt("highScore", score);
-            if (!TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed)
+            if (!TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed)
             {
                 anim.SetTrigger("high");
-                TheBoolThatTelsIfTheAnimationForANewHighScoreHasBeenPlayed = true; 
+                TheBoolThatTellsIfTheAnimationForANewHighScoreHasBeenPlayed = true; 
             }
         }
           highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
