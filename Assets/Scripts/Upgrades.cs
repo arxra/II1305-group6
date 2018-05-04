@@ -52,7 +52,7 @@ public class Upgrades : MonoBehaviour {
 
   public void Update() {
     //IF kill, then add current runs currency collection to the main currency
-    if (! _gos.GetComponent<GameOverScreen>().alive)
+    if (_gos != null && ! _gos.GetComponent<GameOverScreen>().alive)
       _currency += _sc.GetComponent<Score>().RunsFood();
       PlayerPrefs.SetInt("currency", (_currency + PlayerPrefs.GetInt("currency")));
       PlayerPrefs.Save();

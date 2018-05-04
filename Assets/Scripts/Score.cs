@@ -5,11 +5,6 @@ using System.Collections.Generic;
 public class Score : MonoBehaviour {
 
   [Tooltip("The current players score")]
-<<<<<<< HEAD
-    public int score;
-      public Text highScore;
-      public Text text;
-=======
     public int score;
 
   [Tooltip("Insert upgrade module here")]
@@ -19,12 +14,13 @@ public class Score : MonoBehaviour {
   public Text highScore;
   public Text text;
   public Text MultiText;
->>>>>>> 7ea580f... Basic Upgrades framework
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
   private WorldMover _mv;
+
+  private int _totalFoodForRun = 0;
 
   private float _foodFactor;
 
@@ -38,11 +34,6 @@ public class Score : MonoBehaviour {
     public float _mult;
     public int _location;
   }
-<<<<<<< HEAD
-  // Use this for initialization
-=======
-
->>>>>>> 7ea580f... Basic Upgrades framework
   void Start () {
     _mv = GameObject.Find("WorldMover").GetComponent<WorldMover>();
     alive = true;
@@ -51,20 +42,12 @@ public class Score : MonoBehaviour {
     updateText();
   }
 
-<<<<<<< HEAD
-  // Update is called once per frame
-  void Update () {
-    alive = go.GetComponent<GameOverScreen>().alive;
-    float scoreUpdate = 0;
-    //Tick multiplier
-=======
 
   void Update () {
     alive = go.GetComponent<GameOverScreen>().alive;
     float scoreUpdate = 0;
 
     //Tick multiplier  (Multiply by multipliers) 
->>>>>>> 7ea580f... Basic Upgrades framework
     multiplier = 1f;
 
     foreach(Upgrades.Upgrade id in _upgrades.CurrentUpgrades())
@@ -88,16 +71,6 @@ public class Score : MonoBehaviour {
         scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
           score += Mathf.RoundToInt(scoreUpdate);
       }
-<<<<<<< HEAD
-    int oldHighScore = PlayerPrefs.GetInt("highScore");
-      if (score > oldHighScore)
-        PlayerPrefs.SetInt("highScore", score);
-          highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-          
-          
-          
-          updateText();
-=======
 
     //Update highscore
     int oldHighScore = PlayerPrefs.GetInt("highScore");
@@ -112,15 +85,11 @@ public class Score : MonoBehaviour {
       }
     highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
       updateText();
->>>>>>> 7ea580f... Basic Upgrades framework
   }
 
   void updateText()
   {
-<<<<<<< HEAD
-=======
     MultiText.text = "X" + multiplier;
->>>>>>> 7ea580f... Basic Upgrades framework
     text.text = "Score : "+ score ;
   }
 
@@ -130,8 +99,6 @@ public class Score : MonoBehaviour {
     return tmp;
   }
 
-<<<<<<< HEAD
-=======
   //Use only when game's lost
   public int RunsFood() {
     int tmep = _totalFoodForRun;
@@ -140,7 +107,6 @@ public class Score : MonoBehaviour {
   }
 
   //Pickup collectable, add value and destroy when done
->>>>>>> 7ea580f... Basic Upgrades framework
   void OnTriggerEnter(Collider col){
     if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
       GameObject pckup = col.gameObject;
