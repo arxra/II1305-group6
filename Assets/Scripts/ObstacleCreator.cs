@@ -50,17 +50,17 @@ public class ObstacleCreator : MonoBehaviour {
 
 		//Check if spawned to spawn 
 		bool hasSpawned = false;
+		SpawnPolicy session;
+		Vector3 suitableSpawnPoint;
+
 		while(!hasSpawned) {
-			SpawnPolicy session = SpawnNow();
+			session = SpawnNow();
 			
 			if (session != null){
-				hasSpawned = session.InstantiateAt(
-					position: session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), 
-					lastLane: ref lastLane
-				));
-
-				if (!hasSpawned){
-					
+				suitableSpawnPoint = session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane);
+				hasSpawned = session.InstantiateAt(suitableSpawnPoint);
+				
+				if (!hasSpawned && suitableSpawnPoint != Vector3.zero){
 					// Stop spawning this object
 					policies.Remove(session);
 					totalPopularity -= session.Popularity;
