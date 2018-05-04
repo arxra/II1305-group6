@@ -93,7 +93,7 @@ public class Score : MonoBehaviour {
     text.text = "Score : "+ score ;
   }
 
-  public float SizeMultiplier(){
+  public int SizeMultiplier(){
     int tmp = _foodFactor;
     _foodFactor = 0;
     return tmp;
