@@ -55,12 +55,10 @@ public class ObstacleCreator : MonoBehaviour {
 			
 			if (session != null){
 				hasSpawned = session.InstantiateAt(
-					position: session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), 
-					lastLane: ref lastLane
-				));
+					position: session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane)
+				);
 
 				if (!hasSpawned){
-					
 					// Stop spawning this object
 					policies.Remove(session);
 					totalPopularity -= session.Popularity;

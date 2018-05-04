@@ -4,13 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Spawn logic
-
 public class SpawnPolicy : MonoBehaviour {
 
 	[Header("This script will override the default spawn settings")]
 	
-	//Default spawning values
 
 	[Header("(default value = 10)")]
 	[Tooltip("An indicator to how often this gameobject should spawn in relation to other candidates")]
@@ -46,8 +43,10 @@ public class SpawnPolicy : MonoBehaviour {
 		RemainingInstances = remainingInstances; 
 	}
 
-	//Spawn candidate at position
 	public bool InstantiateAt(Vector3 position) {
+		if (position == Vector3.zero)
+			return false;
+
 		if (RemainingInstances == 0)
 			return false;
 		else if(RemainingInstances > 0)
@@ -60,7 +59,6 @@ public class SpawnPolicy : MonoBehaviour {
 		return true;
 	}
 
-	//Check and choose lanes 
 	public Vector3 GetSuitableSpawnPoint(Transform spawnPoints, ref int lastLane) {
 		List<bool> activeSpawnPoints = new List<bool> {SpawnInLaneA, SpawnInLaneB, SpawnInLaneC};
 		activeSpawnPoints[lastLane] = false;
@@ -76,6 +74,6 @@ public class SpawnPolicy : MonoBehaviour {
 			);
 		}
 		else
-			throw new UnityException("You fucked up! Too many excluded lanes :(");
+			return Vector3.zero;
 	}
 } 
