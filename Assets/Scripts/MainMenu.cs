@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour {
 
 	private bool playedPressed = false;
 	
-
+	private AudioManager audioManager;
 	private Image screenFade;
 	private float targetAngle = 180f;
 
@@ -32,9 +32,9 @@ public class MainMenu : MonoBehaviour {
 		upgradesScript = upgrades.GetComponent<Upgrades>();
 		abortUpgrades.SetActive(false);
 		screenFade = GameObject.Find("ScreenFade").GetComponent<Image>();
-
+		audioManager = FindObjectOfType<AudioManager>();
 		
-		FindObjectOfType<AudioManager> ().play ("Menu");
+		audioManager.play ("Menu");
 		//highscoreText.text = "Highscore: " + PlayerPrefs.GetFloat ("highscore");
 	}
 
@@ -43,15 +43,7 @@ public class MainMenu : MonoBehaviour {
 		playedPressed = true;
 		FindObjectOfType<AudioManager> ().mute ("Menu");
 	}
-
-	public void MuteSound(bool toggle){
-		if (!toggle) {
-			FindObjectOfType<AudioManager> ().mute ("Music");
-			soundOn = false;
-		}
-
-	}
-
+	
 	public void QuitGame(){
 
 		//Debug.Log ("Quit");
@@ -76,7 +68,12 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void SetBackgroundMusicEnabled(bool enabled) {
-		
+		foreach(Sound sound in audioManager.music) {
+			if (enabled)
+				audioManager.unMute(sound.name);
+			else
+				audioManager.mute(sound.name);
+		}
 	}
 
 	public void Update() {
@@ -98,7 +95,7 @@ public class MainMenu : MonoBehaviour {
 		}
 
 		if (!soundOn) 
-			FindObjectOfType<AudioManager> ().mute ("Menu");
+			audioManager.mute ("Menu");
 		
 	}
 }
