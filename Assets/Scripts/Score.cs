@@ -51,8 +51,8 @@ public class Score : MonoBehaviour {
     multiplier = 1f;
 
     foreach(Upgrades.Upgrade id in _upgrades.CurrentUpgrades())
-      if(id._name.Equals("multiplier")){ 
-        multiplier += id._level;
+      if(id.IsMyName("multiplier")){ 
+        multiplier += id.Level();
       }
 
 
@@ -63,7 +63,6 @@ public class Score : MonoBehaviour {
       else
         multiplier += mul._mult;
     }
-    
       
       //Update score by adding to old score
       if (alive)
