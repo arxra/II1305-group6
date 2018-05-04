@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Manager : MonoBehaviour {
     public GameOverScreen go;
+    public Score s;
     public void changeScene(int Scene)
     {
         
@@ -14,9 +15,14 @@ public class Manager : MonoBehaviour {
     {
         Time.timeScale = 1;
         go.GetComponent<GameOverScreen>().hidePause();
-       
-
-
     }
+    public void EGM()
+    {
+        go.GetComponent<GameOverScreen>().activateGodMode();
+        GameObject butt = GameObject.Find("EGM");
+        butt.SetActive(false);
+        s.GetComponent<Score>().resetFoodFactor();
+        
+     }
 
 }

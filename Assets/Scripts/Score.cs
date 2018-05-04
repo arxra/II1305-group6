@@ -14,6 +14,7 @@ public class Score : MonoBehaviour {
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
+  public GameObject butt;
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
   private WorldMover _mv = new WorldMover();
 
@@ -37,7 +38,9 @@ public class Score : MonoBehaviour {
     score = 0;
     highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
       updateText();
-  }
+    butt = GameObject.Find("EGM");
+        butt.SetActive(false);
+    }
 
   
   void Update () {
@@ -53,10 +56,16 @@ public class Score : MonoBehaviour {
       else
         multiplier += mul._mult;
     }
-    
-      
-      //Update score by adding to old score
-      if (alive)
+        if (_foodFactor > 100)
+        {
+            
+            butt.SetActive(true);
+        }
+
+
+
+        //Update score by adding to old score
+        if (alive)
       {
         scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
           score += Mathf.RoundToInt(scoreUpdate);
@@ -88,7 +97,10 @@ public class Score : MonoBehaviour {
     _foodFactor = 0;
     return tmp;
   }
-
+  public void resetFoodFactor()
+    {
+        _foodFactor = 0;
+    }
   //Use only when game's lost
   public int RunsFood() {
     int tmep = _totalFoodForRun;
