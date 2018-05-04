@@ -11,7 +11,9 @@ public class GameOverScreen : MonoBehaviour
     private GameObject[] Obstical;
     GameObject[] pauseObjects;
     public bool alive = true;
+	public bool godMode;
     Animator anim;
+	private float immortalityTimer;
 
     private WorldMover worldMover;
     
@@ -21,9 +23,10 @@ public class GameOverScreen : MonoBehaviour
         Time.timeScale = 1;
         pauseObjects = GameObject.FindGameObjectsWithTag("Pause");
         alive = true;
+		godMode = false;
         hidePause();
         worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
-
+		immortalityTimer = 3.0f;
     }
 
     void Update()
@@ -32,7 +35,6 @@ public class GameOverScreen : MonoBehaviour
         {
             if (Time.timeScale == 1 && alive == true)
             {
-                
                 Time.timeScale = 0;
                 showPause();
             }
@@ -49,11 +51,27 @@ public class GameOverScreen : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals("Obstacle"))
         {
-            alive = false;
-            go.GetComponent<GameOverManager>().GameOver();
-            worldMover.IsKill = true;
+			if (!godMode) {
+				alive = false;
+				go.GetComponent<GameOverManager> ().GameOver ();
+				worldMover.IsKill = true;
+			} else {
+				unlimitedPower((collision.transform.parent.gameObject));
+			}
         }
     }
+
+	public void unlimitedPower(GameObject toDestroy) {
+		Destroy (toDestroy);
+	}
+
+	public void activateGodMode() {
+		godMode = true;
+		Invoke ("deactivateGodMode", immortalityTimer);
+	}
+	public void deactivateGodMode() {
+		godMode = false;
+	}
 
 
     public void hidePause()
