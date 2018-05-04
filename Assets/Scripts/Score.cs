@@ -18,7 +18,7 @@ public class Score : MonoBehaviour {
   public bool alive;
   public float multiplier;
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
-  private WorldMover _mv = new WorldMover();
+  private WorldMover _mv;
 
   private int _foodFactor;
   private int _totalFoodForRun;
@@ -39,7 +39,7 @@ public class Score : MonoBehaviour {
     alive = true;
     score = 0;
     highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-      updateText();
+    updateText();
   }
 
 
@@ -49,6 +49,13 @@ public class Score : MonoBehaviour {
 
     //Tick multiplier  (Multiply by multipliers) 
     multiplier = 1f;
+
+    foreach(Upgrades.Upgrade id in _upgrades.CurrentUpgrades())
+      if(id._name.Equals("multiplier")){ 
+        multiplier += id._level;
+      }
+
+
     foreach (MulStruct mul in new Dictionary<int, MulStruct>(_multis).Values) {
       mul._time -= Time.deltaTime;
       if(mul._time <=0) {
