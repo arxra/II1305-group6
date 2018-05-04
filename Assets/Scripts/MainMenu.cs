@@ -6,25 +6,42 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
   
+	private GameObject upgrades;
+
+	private GameObject abortUpgrades;
+	private Animator playAnim, upgradesAnim;
+
+	private Upgrades upgradesScript;
+	private const float BlackoutTime = 2f;
+
+	private bool playedPressed = false;
+	
+
+	private Image screenFade;
+	private float targetAngle = 180f;
+
+	private float screenFadeTimer = BlackoutTime;
+
 	//public Text highscoreText;
 	public bool soundOn = true;
 	void Start(){
+		upgrades = GameObject.Find("Foreground").transform.Find("Upgrades").gameObject;
+		playAnim = GameObject.Find("Play").GetComponent<Animator>();
+		upgradesAnim = upgrades.GetComponent<Animator>();
+		abortUpgrades = upgrades.transform.Find("Abort").gameObject;
+		upgradesScript = upgrades.GetComponent<Upgrades>();
+		abortUpgrades.SetActive(false);
+		screenFade = GameObject.Find("ScreenFade").GetComponent<Image>();
+
+		
 		FindObjectOfType<AudioManager> ().play ("Menu");
 		//highscoreText.text = "Highscore: " + PlayerPrefs.GetFloat ("highscore");
 	}
 
-	void Update(){
-		if (!soundOn) {
-			FindObjectOfType<AudioManager> ().mute ("Menu");
-		}
-	
-	}
-
 	public void PlayGame(){
-		SceneManager.LoadScene (1);
+		playAnim.SetTrigger("PlayedPressed");
+		playedPressed = true;
 		FindObjectOfType<AudioManager> ().mute ("Menu");
-
-
 	}
 
 	public void MuteSound(bool toggle){
@@ -45,10 +62,10 @@ public class MainMenu : MonoBehaviour {
 		upgradesAnim.SetTrigger("UpgradesPressed");
 		abortUpgrades.SetActive(true);
 		foreach(Upgrades.Upgrade u in upgradesScript.CurrentUpgrades()) {
-			var upgradeGO = upgrades.transform.Find(u._name);
+			var upgradeGO = upgrades.transform.Find(u.Name());
 			
 			if (upgradeGO != null)
-				upgradeGO.Find("Price").GetComponent<Text>().text = u._cost + ":-";
+				upgradeGO.Find("Price").GetComponent<Text>().text = u.Cost() + ":-";
 		}
 		
 	}
@@ -79,5 +96,9 @@ public class MainMenu : MonoBehaviour {
 				screenFade.color.a + vel
 			);
 		}
+
+		if (!soundOn) 
+			FindObjectOfType<AudioManager> ().mute ("Menu");
+		
 	}
 }
