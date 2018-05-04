@@ -5,40 +5,39 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
+  
+	//public Text highscoreText;
+	public bool soundOn = true;
+	void Start(){
+		FindObjectOfType<AudioManager> ().play ("Menu");
+		//highscoreText.text = "Highscore: " + PlayerPrefs.GetFloat ("highscore");
+	}
 
-	private GameObject upgrades;
-
-	private GameObject abortUpgrades;
-	private Animator playAnim, upgradesAnim;
-
-	private Upgrades upgradesScript;
-	private const float BlackoutTime = 2f;
-
-	private bool playedPressed = false;
+	void Update(){
+		if (!soundOn) {
+			FindObjectOfType<AudioManager> ().mute ("Menu");
+		}
 	
-
-	private Image screenFade;
-	private float targetAngle = 180f;
-
-	private float screenFadeTimer = BlackoutTime;
-
-	public void Start() {
-		upgrades = GameObject.Find("Foreground").transform.Find("Upgrades").gameObject;
-		playAnim = GameObject.Find("Play").GetComponent<Animator>();
-		upgradesAnim = upgrades.GetComponent<Animator>();
-		abortUpgrades = upgrades.transform.Find("Abort").gameObject;
-		upgradesScript = upgrades.GetComponent<Upgrades>();
-		abortUpgrades.SetActive(false);
-		screenFade = GameObject.Find("ScreenFade").GetComponent<Image>();
-	}	
+	}
 
 	public void PlayGame(){
-		playAnim.SetTrigger("PlayedPressed");
-		playedPressed = true;
+		SceneManager.LoadScene (1);
+		FindObjectOfType<AudioManager> ().mute ("Menu");
+
+
+	}
+
+	public void MuteSound(bool toggle){
+		if (!toggle) {
+			FindObjectOfType<AudioManager> ().mute ("Music");
+			soundOn = false;
+		}
+
 	}
 
 	public void QuitGame(){
-		Debug.Log ("Quit");
+
+		//Debug.Log ("Quit");
 		Application.Quit ();
 	}
 

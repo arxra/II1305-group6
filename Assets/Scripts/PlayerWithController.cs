@@ -13,33 +13,75 @@ public class PlayerWithController : MonoBehaviour {
 	private TouchPlot plot;
 	public const float LANE_DISTANCE = 7.0f;
 	float zedOrigin;
-	bool slideFromAir;
 	bool isSliding;
-	float slideTimer;
 	int currentLane;
 	public float closeEnoughToLane;
 	public Transform CameraReference;
+	WorldMover WorldMoverref;
+	public bool isGround;
+	private bool slideFromAir;
+    private bool isJumping;
+    CapsuleCollider col;
+    private Animator anim;
 
 	// Use this for initialization
 	void Start () {
 		player = GetComponent<CharacterController>();
+        col = GetComponent<CapsuleCollider>();
+        anim = GetComponent<Animator>();
 		plot = new TouchPlot();
-		gravity = 20.0f;
-		jumpforce = 12.0f;
+		gravity = 37.0f;
+		jumpforce = 20.0f;
 		desiredLane = 0;
 		speed = 80f;
 		verticalVelocity = 0.0f;
 		zedOrigin = gameObject.transform.position.z;
 		slideFromAir = false;
 		isSliding = false;
-		slideTimer = 0.0f;
 		currentLane = desiredLane;
-		closeEnoughToLane = 0.001f;
+		closeEnoughToLane = 0.05f;
+		player.stepOffset = 0.3f;
+		player.skinWidth = player.radius * 0.1f;
+		player.slopeLimit = 45;
+		WorldMoverref = FindObjectOfType<WorldMover>();
 	}
 
 	// Update is called once per frame
-	void Update () {
-		TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
+	void Update ()
+    {
+		isGround = isGrounded();
+		RaycastHit hit;
+		if (Physics.Raycast (new Ray (
+			new Vector3 (player.bounds.center.x,
+				player.bounds.center.y - player.bounds.extents.y + 0.001f,
+				player.bounds.center.z + player.bounds.extents.z - 0.2f),
+			Vector3.forward), out hit, player.bounds.extents.z + 2.0f))
+        {
+            if (!hit.collider.gameObject.name.Equals("End"))
+            {
+                isGround = true;
+                float ang = (Vector3.Angle(Vector3.up, hit.normal) * Mathf.Deg2Rad);
+
+                Debug.DrawRay(new Vector3(player.bounds.center.x,
+                    (player.bounds.center.y - player.bounds.extents.y + 0.1f),
+                    player.bounds.center.z + player.bounds.extents.z), Vector3.forward, Color.cyan, 0.3f);
+
+                //calculate requiered vertical velocity for current slope;
+                if (ang < Mathf.PI / 4)
+                {
+                    isGround = true;
+                    float boostUp = (Mathf.Tan(ang) * (WorldMoverref.GetCurrentSpeed() * Time.deltaTime));
+                    player.Move(Vector3.up * boostUp);
+                }
+            }
+		}
+
+        if ((player.collisionFlags & CollisionFlags.Above) != 0)
+        {
+            Debug.Log("Hit Head");
+        }
+
+        TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
 		bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
 		pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
 		pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
@@ -47,9 +89,9 @@ public class PlayerWithController : MonoBehaviour {
 
 		// Desiered Lane
 		if (pressingLeft)
-			moveLane (false);
-		if (pressingRight)
-			moveLane (true);
+			MoveLane (false);
+        if (pressingRight)
+            MoveLane (true);
 
 		//the direction of Desiered Lane
 		Vector3 towards = Vector3.zero;
@@ -59,103 +101,131 @@ public class PlayerWithController : MonoBehaviour {
 			towards += Vector3.right * LANE_DISTANCE;
 
 		// Current Lane
-		if (gameObject.transform.position.x > -0.2f * LANE_DISTANCE || gameObject.transform.position.x < 0.2f * LANE_DISTANCE) 
+		if (gameObject.transform.position.x > -0.1f * LANE_DISTANCE || gameObject.transform.position.x < 0.1f * LANE_DISTANCE) 
 			currentLane = 0;
-		if (gameObject.transform.position.x < -0.8f * LANE_DISTANCE)
+		if (gameObject.transform.position.x < -0.9f * LANE_DISTANCE)
 			currentLane = -1;
-		if (gameObject.transform.position.x > 0.8f * LANE_DISTANCE)
-			currentLane = 1;
+		if (gameObject.transform.position.x > 0.9f * LANE_DISTANCE)
+			currentLane = 1;	
 
 		//actual vector that will perform move operation
 		Vector3 moveVector = Vector3.zero;
+		if (Mathf.Abs ((towards - gameObject.transform.position).x) < closeEnoughToLane) //when close enough teleport, stops from overshooting!
+			gameObject.transform.position = new Vector3 (currentLane * LANE_DISTANCE, gameObject.transform.position.y, gameObject.transform.position.z);
 
-		if (Mathf.Abs((towards - gameObject.transform.position).x) < closeEnoughToLane) //when close enough teleport, stops from overshooting!
-			gameObject.transform.position =  new Vector3(currentLane * LANE_DISTANCE, gameObject.transform.position.y, gameObject.transform.position.z);
-
-		moveVector.x = (towards - gameObject.transform.position).normalized.x * speed;
-		moveVector.z = (zedOrigin * Vector3.forward - gameObject.transform.position).normalized.z * speed;
-
-		if (player.isGrounded) {
-			if (pressingUp) {
+		if (isGround)
+        {
+			verticalVelocity = -0.1f;
+            isJumping = false;
+            anim.ResetTrigger("Jump");
+            if (pressingUp)
+            {
 				verticalVelocity = jumpforce;
-				if (isSliding) {
-					isSliding = false;
-					slideTimer = 0;
-					stopSliding ();
-				}
-			}  else {
-				verticalVelocity = -0.1f;
-			}
-			if (pressingDown || slideFromAir) {
+                isJumping = true;
+                anim.SetTrigger("Jump");
+            }  
+			else if (pressingDown || slideFromAir)
+            {
+				verticalVelocity = 0.0f;
 				slideFromAir = false;
-				slideTimer = 1.0f;
-				if (!isSliding) {
-					startSliding ();
+				if (!isSliding)
+                {
+					StartSliding ();
+					Invoke ("StopSliding", 1.0f);
 				}
 			}
 		}
-		else {
+		else
+        {
 			verticalVelocity -= gravity * Time.deltaTime;
-			if (pressingDown) {
+			if (pressingDown)
+            {
 				verticalVelocity = -2 * jumpforce;
 				slideFromAir = true;
-			}
-
+                anim.ResetTrigger("Jump");
+            }
 		}
+
+		moveVector.x = (towards - gameObject.transform.position).normalized.x * speed;
 		moveVector.y = verticalVelocity;
-		player.Move(moveVector * Time.deltaTime);
-		if (isSliding) {
-			slideTimer -= Time.deltaTime;
-		}
-		if (slideTimer < 0) {
-			slideTimer = 0;
-			stopSliding ();
-			isSliding = false;
-		}
-	}
 
-	void moveLane(bool goRight) {
-		if (goRight) {
+		player.Move(Vector3.right * moveVector.x * Time.deltaTime);
+		if ((player.collisionFlags & CollisionFlags.Sides) != 0)
+        {
+			desiredLane = currentLane;
+		}
+		
+
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, zedOrigin);
+        player.Move(Vector3.up * moveVector.y * Time.deltaTime);
+
+        Vector3 dir = transform.rotation.eulerAngles;
+        if (dir != Vector3.zero)
+        {
+            dir.y = 0;
+            dir.z = WorldMoverref.GetCurrentSpeed();
+            Vector3.Angle(Vector3.forward, dir);
+            transform.forward = Vector3.Lerp(transform.forward, dir, 0.05f);
+        }
+    }
+
+	void MoveLane(bool goRight)
+    {
+		if (goRight)
+        {
 			desiredLane++;
 			if (desiredLane > 1)
 				desiredLane = 1;
-		}  else {
+		}  else
+        {
 			desiredLane--;
 			if (desiredLane < -1)
 				desiredLane = -1;
 		}
 	}
 
-	void startSliding() {
+	void StartSliding()
+    {
 		isSliding = true;
 		player.height /= 2;
-		if(player.center.y > 0)
-			player.center = new Vector3(player.center.x, player.center.y / 2, player.center.z);
-		else
-			player.center = new Vector3(player.center.x, 2 * player.center.y, player.center.z);
+        col.height /= 2;
+        player.center = new Vector3(player.center.x, player.center.y / 2, player.center.z);
+        col.center = new Vector3(col.center.x, col.center.y / 2, col.center.z);
+    }
 
-		verticalVelocity = -10.0f; //make sure new hitbox is instantly grounded.
-	}
-	void stopSliding() {
-		player.height *= 2;
-		if(player.center.y > 0)
-			player.center = new Vector3(player.center.x, 2 * player.center.y, player.center.z);
-		else
-			player.center = new Vector3(player.center.x, player.center.y / 2, player.center.z);
-	}
-
-	void OnControllerColliderHit(ControllerColliderHit other)
-	{
-		if (!other.gameObject.CompareTag ("Background")) {
-			desiredLane = currentLane;
-		}
+	void StopSliding()
+    {
+		if (isSliding)
+        {
+			isSliding = false;
+			player.height *= 2;
+            col.height *= 2;
+            player.center = new Vector3 (player.center.x, player.center.y * 2, player.center.z);
+            col.center = new Vector3(col.center.x, col.center.y * 2, col.center.z);
+        }
 	}
 
-	void LateUpdate() {
-		CameraReference.position = new Vector3 (
-			CameraReference.position.x, 
-			Mathf.Max (transform.position.y, 0), 
-			CameraReference.position.z
-		);
+	void LateUpdate()
+    {
+        if (!isJumping)
+        {
+            CameraReference.position = new Vector3(
+            CameraReference.position.x,
+            Mathf.Max(transform.position.y, 0),
+            CameraReference.position.z
+        );
+        }
+	}
+	public bool isGrounded()
+    {
+		Ray groundRay = new Ray (
+			new Vector3 (player.bounds.center.x,
+				(player.bounds.center.y),
+				player.bounds.center.z),
+			Vector3.down);
+		if (Physics.Raycast(groundRay, player.bounds.extents.y + 0.1f))
+			Debug.DrawRay (groundRay.origin, groundRay.direction * (player.bounds.extents.y + 0.2f));
+		bool grounded = Physics.Raycast (groundRay, player.bounds.extents.y + 0.2f);
+		return grounded;
 	}
 }

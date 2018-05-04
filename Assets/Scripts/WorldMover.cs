@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//World mover
+
 public class WorldMover : MonoBehaviour {
 
     public Transform BackgroundStart, BackgroundStop;
@@ -9,12 +11,12 @@ public class WorldMover : MonoBehaviour {
     [Tooltip("A normalized directional vector pointing in the direction that the world should move")]
     public Vector3 MovementDirection;
 
-
     [Tooltip("The acceleration of the movement [m/s^2]")]
     public float Acceleration;
 
     [Tooltip("Limits the maximum speed of the world [m/s]")]
-    public float MaxSpeed;
+   
+	public float MaxSpeed;
 
     public bool IsKill;
 
@@ -24,7 +26,7 @@ public class WorldMover : MonoBehaviour {
 
     private Vector3 posA, posB;
 
-    // Use this for initialization
+   
     void Start () {
         currentSpeed = 0f;
 
@@ -35,8 +37,10 @@ public class WorldMover : MonoBehaviour {
         posB = partB.transform.position;
     }
 
-  // Update is called once per frame
+  
     void Update () {
+
+		//If to be killed - slowly decrease
         if (IsKill && currentSpeed != 0){
             if (currentSpeed > 0)
                 currentSpeed *= -1f;
@@ -47,27 +51,27 @@ public class WorldMover : MonoBehaviour {
                 currentSpeed = 0f;
         }
         else 
+			//If not - increase speed
             currentSpeed = Mathf.Clamp(currentSpeed + Acceleration * Time.deltaTime, 0f, MaxSpeed);    
         
 
         Vector3 offset = MovementDirection * currentSpeed * Time.deltaTime;
 
-        // Foreground objects
-        // ##################
+       /**********************************************************************************************/
+		// Foreground objects
 
         foreach(GameObject target in ObjectFilter.EntitiesWithTags(ObjectFilter.Tag.Foreground)) 
             target.transform.position += offset;
 
-
+		/**********************************************************************************************/
         // Background objects
-        // ##################
 
         partA.transform.position += offset;
         partB.transform.position += offset;
 
-        // Switch the positioning of part A and B
-        // ######################################
-        
+       /************************************************************************************************/
+		// Switch the positioning of part A and B
+
         if (partA.transform.Find("End").transform.position.z <= 0){
             
             partA.transform.position = posB;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -17,12 +17,12 @@ public class Score : MonoBehaviour {
   public GameOverScreen go;
   public bool alive;
   public float multiplier;
+  public GameObject butt;
   private Dictionary<int, MulStruct> _multis = new Dictionary<int, MulStruct>();
   private WorldMover _mv;
 
-  private int _totalFoodForRun = 0;
-
-  private float _foodFactor;
+  private int _foodFactor;
+  private int _totalFoodForRun;
 
   public class MulStruct {
     public MulStruct (float t, float m, int location){
@@ -34,13 +34,17 @@ public class Score : MonoBehaviour {
     public float _mult;
     public int _location;
   }
+
   void Start () {
     _mv = GameObject.Find("WorldMover").GetComponent<WorldMover>();
     alive = true;
     score = 0;
     highScore.text = "High Score: " + PlayerPrefs.GetInt("highScore");
-    updateText();
-  }
+      updateText();
+    butt = GameObject.Find("EGM");
+        butt.SetActive(false);
+    }
+
 
 
   void Update () {
@@ -51,8 +55,8 @@ public class Score : MonoBehaviour {
     multiplier = 1f;
 
     foreach(Upgrades.Upgrade id in _upgrades.CurrentUpgrades())
-      if(id._name.Equals("multiplier")){ 
-        multiplier += id._level;
+      if(id.IsMyName("multiplier")){ 
+        multiplier += id.Level();
       }
 
 
@@ -63,13 +67,16 @@ public class Score : MonoBehaviour {
       else
         multiplier += mul._mult;
     }
-    
+        if (_foodFactor > 100)
+        {
+            
+            butt.SetActive(true);
+        }
       
-      
-      if (alive)
-      {
+      //Update score by adding to old score
+      if (alive){
         scoreUpdate += _mv.GetCurrentSpeed() * Time.deltaTime * multiplier;
-          score += Mathf.RoundToInt(scoreUpdate);
+        score += Mathf.RoundToInt(scoreUpdate);
       }
 
     //Update highscore
@@ -93,12 +100,15 @@ public class Score : MonoBehaviour {
     text.text = "Score : "+ score ;
   }
 
-  public float SizeMultiplier(){
-    float tmp = _foodFactor;
-    _foodFactor = 0f;
+  public int SizeMultiplier(){
+    int tmp = _foodFactor;
+    _foodFactor = 0;
     return tmp;
   }
-
+  public void resetFoodFactor()
+    {
+        _foodFactor = 0;
+    }
   //Use only when game's lost
   public int RunsFood() {
     int tmep = _totalFoodForRun;
@@ -111,8 +121,9 @@ public class Score : MonoBehaviour {
     if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
       GameObject pckup = col.gameObject;
       score += pckup.GetComponent<Collectables>().value;
-      _multis.Add(Time.frameCount, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
+      _multis.Add(_multis.Count, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
       _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
+      _totalFoodForRun += pckup.GetComponent<Collectables>()._sizeMultiplier;
       Destroy(pckup);
     }
   }
