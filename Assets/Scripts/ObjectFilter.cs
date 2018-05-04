@@ -13,6 +13,24 @@ public static class ObjectFilter {
 		Static,
 		Collectable
 	}
+
+	public static string tagToStr(Tag tag) {
+		switch (tag) {
+		case Tag.Background:
+			return "Background";
+		case Tag.Collectable:
+			return "Collectable";
+		case Tag.Enemy:
+			return "Enemy";
+		case Tag.Foreground:
+			return "Foreground";
+		case Tag.Static:
+			return "Static";
+		default:
+			return "Error";
+		}
+	}
+
 		
 	//Checks entity's tags
 	public static bool EntityHasTags(GameObject entity, params Tag[] tags) {
@@ -42,7 +60,7 @@ public static class ObjectFilter {
 			hasTags = true;
 			
 			foreach(Tag tag in tags) {
-				if(!obj.tag.Contains(tag.ToString()))
+				if(!obj.tag.Contains(tagToStr(tag)))
         			hasTags = false;
 			}
 
