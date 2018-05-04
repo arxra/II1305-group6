@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour {
 	}
 
 	void Start(){
-		if (SceneManager.GetActiveScene ().name == "MainGame" && mainMenuBool.soundOn )
+		if (SceneManager.GetActiveScene ().name == "MainGame" )//&& mainMenuBool.soundOn )
 			play ("Music");
 	}
 

@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 4785141028191142}
   m_Layer: 0
   m_Name: minivan
-  m_TagString: Foreground Static
+  m_TagString: Foreground Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -412,7 +412,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1773025873667614}
   m_LocalRotation: {x: 0, y: 0.9961947, z: -0, w: -0.08715578}
-  m_LocalPosition: {x: -10, y: 0, z: 20}
+  m_LocalPosition: {x: -47.2, y: 0, z: 26.6}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 4416814308959212}
