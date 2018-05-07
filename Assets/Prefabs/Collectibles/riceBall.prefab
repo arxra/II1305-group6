@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4834525487832472}
   - component: {fileID: 65207037951700226}
   - component: {fileID: 114106521555605726}
+  - component: {fileID: 114133851563864656}
   m_Layer: 0
   m_Name: riceBall
   m_TagString: Foreground Collectable
@@ -140,3 +141,19 @@ MonoBehaviour:
   _time: 0
   _mult: 0
   _sizeMultiplier: 1
+--- !u!114 &114133851563864656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1639184213960656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Popularity: 5
+  RemainingInstances: -1
+  SpawnInLaneA: 1
+  SpawnInLaneB: 1
+  SpawnInLaneC: 1
