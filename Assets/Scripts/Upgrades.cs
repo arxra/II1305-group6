@@ -55,19 +55,18 @@ public class Upgrades : MonoBehaviour {
     if (_gos != null && ! _gos.GetComponent<GameOverScreen>().alive)
 
       _currency += _sc.GetComponent<Score>().RunsFood();
-      PlayerPrefs.SetInt("currency", (_currency + PlayerPrefs.GetInt("currency")));
-      PlayerPrefs.Save();
+    PlayerPrefs.SetInt("currency", (_currency + PlayerPrefs.GetInt("currency")));
+    PlayerPrefs.Save();
   }
 
 
   public class Upgrade {
     public Upgrade(string na, Upgrades parent){
       _name = na;
-      if(PlayerPrefs.HasKey(na))
-      _level = PlayerPrefs.GetInt(na);
-      else
+      if(!PlayerPrefs.HasKey(na))
         PlayerPrefs.SetInt(na, 1);
-    //Increment the cost of stuff exponatially
+      _level = PlayerPrefs.GetInt(na);
+      //Increment the cost of stuff exponatially
       costInc();
       _parent = parent;
     }
