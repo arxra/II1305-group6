@@ -32,7 +32,7 @@ public class PlayerControl : MonoBehaviour {
 
     [Tooltip("Reference to the camera")]
     public Transform CameraReference;
-    private CapsuleCollider collider;
+    private CapsuleCollider capsuleCollider;
     private bool isGrounded;
     private bool isJumping;
     private float laneLockingTimeout;
@@ -57,7 +57,7 @@ public class PlayerControl : MonoBehaviour {
         laneMovementDirection = Vector3.zero;
         currentLane = 1;
         slideFromAir = false;
-        collider = this.gameObject.GetComponent<CapsuleCollider>();
+        capsuleCollider = this.gameObject.GetComponent<CapsuleCollider>();
         plot = new TouchPlot();
         worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
         animator = GetComponent<Animator>();
@@ -86,7 +86,7 @@ public class PlayerControl : MonoBehaviour {
         RaycastHit hit;
         float distanceToGround = GroundLevelMargin + getEllipsRadius();
 
-        isGrounded = Physics.Raycast(new Ray(transform.position + collider.center, Vector3.down), out hit, distanceToGround);
+        isGrounded = Physics.Raycast(new Ray(transform.position + capsuleCollider.center, Vector3.down), out hit, distanceToGround);
 
 		//Prevent falling through ground level
         if (isGrounded)
@@ -181,7 +181,7 @@ public class PlayerControl : MonoBehaviour {
                 verticalVelocity = Mathf.Max(0, verticalVelocity);    
             }
 
-            if (!isJumping && !isSliding) ;
+           // if (!isJumping && !isSliding) ;
                 
                // enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
         }
@@ -254,7 +254,7 @@ public class PlayerControl : MonoBehaviour {
         if (currentLane != validNewLane) {
             laneMovementDirection = (validNewLane < currentLane ? Vector3.left : Vector3.right);
 
-            if (Physics.Raycast(new Ray(transform.position + collider.center, laneMovementDirection), distanceBetweenEachLane)) {
+            if (Physics.Raycast(new Ray(transform.position + capsuleCollider.center, laneMovementDirection), distanceBetweenEachLane)) {
                 // Obstacle in the way
                 laneMovementDirection = Vector3.zero;
                 return;
@@ -266,8 +266,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private float getEllipsRadius() {
-        float a = collider.height / 2;
-        float b = collider.radius;
+        float a = capsuleCollider.height / 2;
+        float b = capsuleCollider.radius;
         float angle = Mathf.Deg2Rad * transform.rotation.eulerAngles.x;
 
         return (
