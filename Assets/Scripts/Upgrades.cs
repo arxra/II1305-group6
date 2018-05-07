@@ -63,7 +63,10 @@ public class Upgrades : MonoBehaviour {
   public class Upgrade {
     public Upgrade(string na, Upgrades parent){
       _name = na;
+      if(PlayerPrefs.HasKey(na))
       _level = PlayerPrefs.GetInt(na);
+      else
+        PlayerPrefs.SetInt(na, 1);
     //Increment the cost of stuff exponatially
       costInc();
       _parent = parent;
@@ -87,6 +90,7 @@ public class Upgrades : MonoBehaviour {
         _level ++;
         PlayerPrefs.SetInt(_name, _level);
         PlayerPrefs.Save();
+        costInc();
         return true;
       }
       //Imporvement failed
