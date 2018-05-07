@@ -353,6 +353,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 100
-  _time: 10
-  _mult: 5
+  _time: 0
+  _mult: 0
   _sizeMultiplier: 8
