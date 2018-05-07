@@ -155,9 +155,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4574268086034504}
+  - component: {fileID: 114479759607706254}
+  - component: {fileID: 114675167542278348}
+  - component: {fileID: 65872978116787432}
   m_Layer: 0
-  m_Name: coinx2
-  m_TagString: Untagged
+  m_Name: Coinx2
+  m_TagString: Foreground Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -272,7 +275,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768122018800426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.44, y: -4.89, z: 0}
+  m_LocalPosition: {x: 11, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4023738019242566}
@@ -832,3 +835,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1434004697676394}
   m_Mesh: {fileID: 4300002, guid: b44490b05e8684ae799e5231b16892e3, type: 3}
+--- !u!65 &65872978116787432
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1768122018800426}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.3110008, y: 4.1118336, z: 1}
+  m_Center: {x: -0.03535652, y: 1.5559168, z: 0}
+--- !u!114 &114479759607706254
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1768122018800426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d421987136c414c26bc96412ffbc8e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 0
+  _time: 20
+  _mult: 2
+  _sizeMultiplier: 0
+  up: {fileID: 0}
+--- !u!114 &114675167542278348
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1768122018800426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Popularity: 5
+  RemainingInstances: -1
+  SpawnInLaneA: 1
+  SpawnInLaneB: 1
+  SpawnInLaneC: 1

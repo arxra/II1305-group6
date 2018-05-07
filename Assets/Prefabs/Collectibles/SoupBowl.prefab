@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Popularity: 25
+  Popularity: 7
   RemainingInstances: -1
   SpawnInLaneA: 1
   SpawnInLaneB: 1
@@ -373,3 +373,4 @@ MonoBehaviour:
   _time: 0
   _mult: 0
   _sizeMultiplier: 8
+  up: {fileID: 0}

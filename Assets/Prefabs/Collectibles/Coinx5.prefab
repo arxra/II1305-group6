@@ -121,9 +121,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4695560722078522}
+  - component: {fileID: 114730618612971498}
+  - component: {fileID: 114001410734662272}
+  - component: {fileID: 65287350281413382}
   m_Layer: 0
-  m_Name: coinx5
-  m_TagString: Untagged
+  m_Name: Coinx5
+  m_TagString: Foreground Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -325,7 +328,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1649626797399192}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -14.35, z: 0}
+  m_LocalPosition: {x: 11, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4331710994032298}
@@ -832,3 +835,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1148167166418662}
   m_Mesh: {fileID: 4300012, guid: 39e8ed4d712e24f4eaca862696799081, type: 3}
+--- !u!65 &65287350281413382
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649626797399192}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.187275, y: 3.8680463, z: 1}
+  m_Center: {x: -0.085920334, y: 1.4340231, z: 0}
+--- !u!114 &114001410734662272
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649626797399192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Popularity: 1
+  RemainingInstances: -1
+  SpawnInLaneA: 1
+  SpawnInLaneB: 1
+  SpawnInLaneC: 1
+--- !u!114 &114730618612971498
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649626797399192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d421987136c414c26bc96412ffbc8e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 0
+  _time: 20
+  _mult: 5
+  _sizeMultiplier: 0
+  up: {fileID: 0}
