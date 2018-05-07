@@ -65,7 +65,7 @@ public class Score : MonoBehaviour {
       if(mul._time <=0) {
         _multis.Remove(mul._location);}
       else
-        multiplier += mul._mult;
+        multiplier *= mul._mult;
     }
         if (_foodFactor > 100)
         {
