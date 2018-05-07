@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 //World mover
 
@@ -24,6 +25,8 @@ public class WorldMover : MonoBehaviour {
   private Vector3 posA, posB;
 
   public Upgrades ups;
+
+	List<GameObject> obstacleList = new List<GameObject>();
 
   void Start () {
     currentSpeed = 0f;
@@ -62,8 +65,15 @@ public class WorldMover : MonoBehaviour {
     /**********************************************************************************************/
     // Foreground objects
 
-    foreach(GameObject target in ObjectFilter.EntitiesWithTags(ObjectFilter.Tag.Foreground)) 
-      target.transform.position += offset;
+		foreach (GameObject obj in obstacleList) {
+			if (obj == null)
+				obstacleList.Remove(obj);
+			else
+			obj.transform.position += offset;
+		}
+
+   // foreach(GameObject target in ObjectFilter.EntitiesWithTags(ObjectFilter.Tag.Foreground)) 
+     // target.transform.position += offset;
 
     /**********************************************************************************************/
     // Background objects
@@ -95,4 +105,8 @@ public class WorldMover : MonoBehaviour {
   public float GetCurrentSpeed() {
     return currentSpeed;
   }
+
+	public void addToList (GameObject toAdd) {
+		obstacleList.Add (toAdd);
+	}
 }
