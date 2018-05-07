@@ -212,3 +212,4 @@ MonoBehaviour:
   _time: 0
   _mult: 0
   _sizeMultiplier: 2
+  up: {fileID: 0}
