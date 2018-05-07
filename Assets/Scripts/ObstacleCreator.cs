@@ -14,7 +14,6 @@ public class ObstacleCreator : MonoBehaviour {
 	private float timeout;
 	private int lastLane;
 
-
 	void Start () {
 		policies = new List<SpawnPolicy>();
 		timeout = AutoSpawnInterval;	
@@ -58,9 +57,14 @@ public class ObstacleCreator : MonoBehaviour {
 			session = SpawnNow();
 			
 			if (session != null){
+				GameObject spawnClone = null;
+
 				suitableSpawnPoint = session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane);
-				hasSpawned = session.InstantiateAt(suitableSpawnPoint);
-				
+				hasSpawned = session.InstantiateAt(suitableSpawnPoint, ref spawnClone);
+
+				if (hasSpawned)
+					mw.addToList (spawnClone);
+
 				if (!hasSpawned && suitableSpawnPoint != Vector3.zero){
 					// Stop spawning this object
 					policies.Remove(session);
@@ -81,8 +85,9 @@ public class ObstacleCreator : MonoBehaviour {
 		int pos = 0;
 
 		foreach(SpawnPolicy policy in policies) {
-			if (rand >= pos & rand < (pos += policy.Popularity))
+			if (rand >= pos & rand < (pos += policy.Popularity)) {
 				return policy;
+			}
 		}
 
 		return null;

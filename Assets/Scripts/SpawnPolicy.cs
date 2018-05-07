@@ -23,7 +23,7 @@ public class SpawnPolicy : MonoBehaviour {
 	public bool SpawnInLaneB = true;
 	public bool SpawnInLaneC = true;
 
-	private GameObject candidate;
+	public GameObject candidate;
 
 	public SpawnPolicy(){
 		Popularity = 10;
@@ -43,7 +43,7 @@ public class SpawnPolicy : MonoBehaviour {
 		RemainingInstances = remainingInstances; 
 	}
 
-	public bool InstantiateAt(Vector3 position) {
+	public bool InstantiateAt(Vector3 position, ref GameObject output) {
 		if (position == Vector3.zero)
 			return false;
 
@@ -55,7 +55,7 @@ public class SpawnPolicy : MonoBehaviour {
 		if (candidate == null)
 			candidate = gameObject;
 
-		UnityEngine.Object.Instantiate(candidate, position, candidate.transform.rotation);
+		output = UnityEngine.Object.Instantiate(candidate, position, candidate.transform.rotation);
 		return true;
 	}
 
