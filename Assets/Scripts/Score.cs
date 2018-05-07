@@ -121,9 +121,12 @@ public class Score : MonoBehaviour {
 	 if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
 		string nameOfCollectables = col.gameObject.name;
 		GameObject pckup = col.gameObject;
-		if (nameOfCollectables == "Coinx5(Clone)" || nameOfCollectables == "Coinx2(Clone)") {
-			FindObjectOfType<AudioManager> ().play ("Coin");
-		}
+			if (nameOfCollectables == "Coinx5(Clone)" || nameOfCollectables == "Coinx2(Clone)") {
+				FindObjectOfType<AudioManager> ().play ("Coin");
+			} 
+			else {
+				FindObjectOfType<AudioManager> ().play ("FoodSound");
+			}
       score += pckup.GetComponent<Collectables>().value;
       _multis.Add(_multis.Count, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
       _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
