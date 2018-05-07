@@ -53,7 +53,7 @@ public class GameOverScreen : MonoBehaviour
     {
       if (!godMode) {
         alive = false;
-        go.GetComponent<GameOverManager> ().GameOver ();
+        go.GetComponent<GameOverManager> ().GameOver();
         worldMover.IsKill = true;
       } else {
         unlimitedPower((collision.transform.parent.gameObject));
