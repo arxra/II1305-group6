@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 //Master of spawn policies
@@ -10,6 +8,7 @@ public class ObstacleCreator : MonoBehaviour {
 	public float AutoSpawnInterval = 1;
 
 	private List<SpawnPolicy> policies;
+  public WorldMover mw;
 
 	private int totalPopularity;
 	private float timeout;
@@ -39,6 +38,8 @@ public class ObstacleCreator : MonoBehaviour {
 	
 
 	void Update () {
+    //Spawn Interval depends on WorldMover Speed.
+    AutoSpawnInterval = 40/mw.currentSpeed;
 
 		//Sets continuous spawning intervals
 		if (timeout > 0) {
