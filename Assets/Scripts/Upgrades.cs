@@ -13,7 +13,7 @@ public class Upgrades : MonoBehaviour {
 
   //Upgrades
   private static string[] _ups = {
-    "multiplier",
+    "multiplier_duration",
     "maximum_speed",
     "boost_speed",
     "multiplier_speed",
