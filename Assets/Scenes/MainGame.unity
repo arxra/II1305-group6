@@ -1039,6 +1039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoSpawnInterval: 1
+  mw: {fileID: 27038794}
 --- !u!4 &166155289
 Transform:
   m_ObjectHideFlags: 0
