@@ -118,8 +118,12 @@ public class Score : MonoBehaviour {
 
   //Pickup collectable, add value and destroy when done
   void OnTriggerEnter(Collider col){
-    if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
-      GameObject pckup = col.gameObject;
+	 if(ObjectFilter.EntityHasTags(col.gameObject ,ObjectFilter.Tag.Collectable)){
+		string nameOfCollectables = col.gameObject.name;
+		GameObject pckup = col.gameObject;
+		if (nameOfCollectables == "Coinx5(Clone)" || nameOfCollectables == "Coinx2(Clone)") {
+			FindObjectOfType<AudioManager> ().play ("Coin");
+		}
       score += pckup.GetComponent<Collectables>().value;
       _multis.Add(_multis.Count, new MulStruct(pckup.GetComponent<Collectables>()._time, pckup.GetComponent<Collectables>()._mult, Time.frameCount));
       _foodFactor += pckup.GetComponent<Collectables>()._sizeMultiplier;
