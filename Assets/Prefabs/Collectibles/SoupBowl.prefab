@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4490819806805240}
   - component: {fileID: 65406694467558020}
   - component: {fileID: 114606693834223396}
+  - component: {fileID: 114509448177791122}
   m_Layer: 0
   m_Name: SoupBowl
   m_TagString: Foreground Collectable
@@ -341,6 +342,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.2, y: 1.1000001, z: 2}
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &114509448177791122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1248673838509376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Popularity: 25
+  RemainingInstances: -1
+  SpawnInLaneA: 1
+  SpawnInLaneB: 1
+  SpawnInLaneC: 1
 --- !u!114 &114606693834223396
 MonoBehaviour:
   m_ObjectHideFlags: 1
