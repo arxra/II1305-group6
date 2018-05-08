@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 100
   _time: 0
-  _mult: 0
+  _mult: 1
   _sizeMultiplier: 1
   up: {fileID: 0}
 --- !u!114 &114133851563864656
@@ -158,3 +158,4 @@ MonoBehaviour:
   SpawnInLaneA: 1
   SpawnInLaneB: 1
   SpawnInLaneC: 1
+  candidate: {fileID: 0}

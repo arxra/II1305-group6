@@ -75,39 +75,19 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-    
-    void Update () {
+    private void Update()
+    {
 
-		//Save rotation to override animator
-        enforcedRotation = transform.rotation;
 
-		/***********************************************************************************************************/ 
-		// Stay on the floor
-        RaycastHit hit;
-        float distanceToGround = GroundLevelMargin + getEllipsRadius();
-
-        isGrounded = Physics.Raycast(new Ray(transform.position + capsuleCollider.center, Vector3.down), out hit, distanceToGround);
-
-		//Prevent falling through ground level
-        if (isGrounded)
-        {
-            animator.SetTrigger("Ground");
-            transform.position = new Vector3(
-                    transform.position.x,
-                    Mathf.Max(hit.point.y + distanceToGround, transform.position.y),
-                    transform.position.z
-                );
-        }
-        
-		/***********************************************************************************************************/
+        /***********************************************************************************************************/
         // Touch & Keyboard Input
         TouchPlot.SwipeDirection swipe = plot.GetSwipeDirection(25f);
-        bool pressingLeft  = Input.GetKeyDown(KeyCode.LeftArrow)  || swipe == TouchPlot.SwipeDirection.LEFT,
+        bool pressingLeft = Input.GetKeyDown(KeyCode.LeftArrow) || swipe == TouchPlot.SwipeDirection.LEFT,
              pressingRight = Input.GetKeyDown(KeyCode.RightArrow) || swipe == TouchPlot.SwipeDirection.RIGHT,
-             pressingUp    = Input.GetKeyDown(KeyCode.Space)      || swipe == TouchPlot.SwipeDirection.UP,
-             pressingDown  = Input.GetKeyDown(KeyCode.DownArrow)  || swipe == TouchPlot.SwipeDirection.DOWN;
+             pressingUp = Input.GetKeyDown(KeyCode.Space) || swipe == TouchPlot.SwipeDirection.UP,
+             pressingDown = Input.GetKeyDown(KeyCode.DownArrow) || swipe == TouchPlot.SwipeDirection.DOWN;
 
-		/************************************************************************************************************/
+        /************************************************************************************************************/
         // Lane movement
         if (pressingLeft)
         {
@@ -121,7 +101,100 @@ public class PlayerControl : MonoBehaviour {
             moveToLane(currentLane + 1);
         }
 
-		//Change lanes
+        //Save rotation to override animator
+        enforcedRotation = transform.rotation;
+
+        /***************************************************************************************************************/
+        // Jumping & gravity calculation
+
+        if (isGrounded)
+        {
+
+            // On the ground:
+            if (!isJumping)
+            {
+                CameraReference.position = new Vector3(
+                CameraReference.position.x,
+                Mathf.Max(transform.position.y, 0),
+                CameraReference.position.z
+                );
+                animator.SetTrigger("Ground");
+            }
+            isJumping = false;
+
+
+            //Jumping 
+            if (pressingUp)
+            {
+                animator.ResetTrigger("Ground");
+                verticalVelocity = JumpMagnitudeFactor;
+                slidingTimer = 0f;
+                slideFromAir = false;
+                isJumping = true;
+                animator.SetTrigger("Jump");
+            }
+            else
+            {
+
+                //Sliding 
+                if (pressingDown || slideFromAir)
+                {
+                    slidingTimer = SlideTime;
+                    slideFromAir = false;
+                    enforcedRotation = Quaternion.identity;
+                    animator.SetTrigger("Slide");
+                }
+
+                verticalVelocity = Mathf.Max(0, verticalVelocity);
+            }
+
+            // if (!isJumping && !isSliding) ;
+
+            // enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
+        }
+        else
+        {
+            // In the air:
+            animator.ResetTrigger("Left");
+            animator.ResetTrigger("Right");
+            if (pressingDown)
+            {
+                verticalVelocity = -4f * JumpMagnitudeFactor;
+                slideFromAir = true;
+
+
+            }
+            else
+                verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
+        }
+
+    }
+
+    void FixedUpdate () {
+
+        /***********************************************************************************************************/
+        // Stay on the floor
+        RaycastHit hit;
+        float distanceToGround = GroundLevelMargin + getEllipsRadius();
+
+        isGrounded = Physics.Raycast(new Ray(transform.position + capsuleCollider.center, Vector3.down), out hit, distanceToGround);
+
+        //Prevent falling through ground level
+        if (isGrounded)
+        {
+
+            transform.position = new Vector3(
+                    transform.position.x,
+                    Mathf.Max(hit.point.y + distanceToGround, transform.position.y),
+                    transform.position.z
+                );
+        }
+
+
+
+
+
+        //Change lanes
         Vector3 degrees = transform.rotation.eulerAngles;
         if (laneMovementDirection != Vector3.zero) {
             float xDestination =  LaneOriginPoints.transform.GetChild(currentLane).transform.position.x;
@@ -150,77 +223,28 @@ public class PlayerControl : MonoBehaviour {
         degrees.x += getTemporaryAngleDelta(degrees.x, SlidingAngle, ref isSliding, slidingTimer > 0);
         enforcedRotation = Quaternion.Euler(degrees);
 
-        /***************************************************************************************************************/
-		// Jumping & gravity calculation
- 
-        if (isGrounded){
-            // On the ground:
-            
-            isJumping = false;
-            
 
-			//Jumping 
-            if (pressingUp) {
-                animator.ResetTrigger("Ground");
-                verticalVelocity = JumpMagnitudeFactor;
-                slidingTimer = 0f;
-                slideFromAir = false;
-                isJumping = true;
-                animator.SetTrigger("Jump");
-            }
-            else{
-
-				//Sliding 
-                if (pressingDown || slideFromAir){
-                    slidingTimer = SlideTime;
-                    slideFromAir = false;
-                    enforcedRotation = Quaternion.identity;
-                    animator.SetTrigger("Slide");
-                }
-
-                verticalVelocity = Mathf.Max(0, verticalVelocity);    
-            }
-
-           // if (!isJumping && !isSliding) ;
-                
-               // enforcedRotation.Set(0f, enforcedRotation.y, enforcedRotation.z, enforcedRotation.w);
-        }
-        else {
-            // In the air:
-            animator.ResetTrigger("Left");
-            animator.ResetTrigger("Right");
-            if (pressingDown) {
-                verticalVelocity = -4f * JumpMagnitudeFactor;
-                slideFromAir = true;
-                
-
-            }
-            else
-                verticalVelocity -= GravityMagnitudeFactor * Time.deltaTime;
-        }
 
         // Apply new transformations
         transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
 
         laneLockingTimeout -= Time.deltaTime;
         slidingTimer -= Time.deltaTime;
-	}
+        
+    }
 
     void LateUpdate() {
-
-        if (isSliding || slideFromAir) {
+       
+        if (isSliding || slideFromAir)
+        {
             animator.ResetTrigger("Left");
             animator.ResetTrigger("Right");
 
         }
         //    transform.rotation = enforcedRotation;
-        if (!isJumping) {
-            CameraReference.position = new Vector3(
-                CameraReference.position.x, 
-                Mathf.Max(transform.position.y, 0), 
-                CameraReference.position.z
-            );
-        }
+        
+        
+
     }
 
 	//Retrieve angle for movement
