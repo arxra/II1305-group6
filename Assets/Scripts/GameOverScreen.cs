@@ -23,7 +23,7 @@ public class GameOverScreen : MonoBehaviour
     hidePause();
     worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
     immortalityTimer = 3.0f;
-
+    
     foreach(Upgrades.Upgrade t in ups.CurrentUpgrades())
       if(t.IsMyName("godmode_timer"))
         immortalityTimer += t.Level();
@@ -62,6 +62,7 @@ public class GameOverScreen : MonoBehaviour
   }
 
   public void unlimitedPower(GameObject toDestroy) {
+        worldMover.removeFromList(toDestroy);
     Destroy (toDestroy);
   }
 
