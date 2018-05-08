@@ -10,17 +10,8 @@ public class ObstacleRemover : MonoBehaviour {
     var enemy = other.gameObject;
         if (enemy != null)
         {
-           
-            if (enemy.tag.Equals("Foreground Collectable"))
-            {
-                Object.Destroy(enemy);
-                wm.removeFromList(enemy);
-            }
-            else
-            {
-                Object.Destroy(enemy.transform.parent.gameObject);
-                wm.removeFromList(enemy.transform.parent.gameObject);
-            }
+			Object.Destroy(enemy.transform.root.gameObject);
+			wm.removeFromList(enemy.transform.root.gameObject);
         }
     }
 }
