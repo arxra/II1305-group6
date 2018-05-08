@@ -109,4 +109,8 @@ public class WorldMover : MonoBehaviour {
 	public void addToList (GameObject toAdd) {
 		obstacleList.Add (toAdd);
 	}
+    public void removeFromList(GameObject toRemove)
+    {
+        obstacleList.Remove(toRemove);
+    }
 }

@@ -66,13 +66,13 @@ MonoBehaviour:
     loop: 1
   - clip: {fileID: 8300000, guid: b1c490d44cfb0414786c16ac2abdad6d, type: 3}
     name: Coin
-    volume: 0.556
+    volume: 0.176
     pitch: 1
     source: {fileID: 0}
-    loop: 0
+    loop: 1
   - clip: {fileID: 8300000, guid: 58962c1a63e9f404ca2017099a1756d4, type: 3}
     name: GodMode
-    volume: 0.556
+    volume: 0.406
     pitch: 1
     source: {fileID: 0}
     loop: 0
