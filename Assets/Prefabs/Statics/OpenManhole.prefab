@@ -118,7 +118,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4138820181940094}
-  - component: {fileID: 114439754862610822}
   m_Layer: 0
   m_Name: OpenManhole
   m_TagString: Foreground Static
@@ -344,23 +343,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114439754862610822
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1858958328037456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Popularity: 999
-  RemainingInstances: -1
-  SpawnInLaneA: 1
-  SpawnInLaneB: 1
-  SpawnInLaneC: 1
-  candidate: {fileID: 0}
 --- !u!198 &198868621195864022
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -421,7 +403,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -2005197560
+  randomSeed: 1851723095
   InitialModule:
     serializedVersion: 3
     enabled: 1
