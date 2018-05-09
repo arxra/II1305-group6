@@ -26,8 +26,6 @@ public class Upgrades : MonoBehaviour {
     foreach (string up in _ups){
       _ownedUpgrades.Add(new Upgrade(up, this));
     }
-    foreach(Upgrade t in CurrentUpgrades())
-      Debug.Log(t.Name());
   }
 
 
@@ -73,7 +71,7 @@ public class Upgrades : MonoBehaviour {
       _parent = parent;
     }
     private void costInc(){
-      _cost = Mathf.RoundToInt(Mathf.Pow(100, (0.2f * _level + 1)));
+      _cost = Mathf.RoundToInt(Mathf.Pow(50 + _level * 10, 1.2f));
     }
 
     private string _name;
