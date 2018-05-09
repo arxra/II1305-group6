@@ -67,10 +67,11 @@ public class Score : MonoBehaviour {
       else
         multiplier *= mul._mult;
     }
+        
         if (_foodFactor > 100)
         {
-            
             butt.SetActive(true);
+            FindObjectOfType<AudioManager>().play("EGM");
         }
       
       //Update score by adding to old score
