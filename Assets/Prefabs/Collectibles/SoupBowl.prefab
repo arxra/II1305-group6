@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4490819806805240}
   - component: {fileID: 65406694467558020}
   - component: {fileID: 114606693834223396}
+  - component: {fileID: 114509448177791122}
   m_Layer: 0
   m_Name: SoupBowl
   m_TagString: Foreground Collectable
@@ -142,8 +143,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1248673838509376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.77, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -37.64, y: 2, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4084428856117954}
   - {fileID: 4386590125203894}
@@ -213,7 +214,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: f16438a55993ab94fa1b32096075542d, type: 2}
+  - {fileID: 2100000, guid: 68cbec16dd70bf54eba1636785798b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -247,7 +248,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: f16438a55993ab94fa1b32096075542d, type: 2}
+  - {fileID: 2100000, guid: 68cbec16dd70bf54eba1636785798b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -281,7 +282,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: f16438a55993ab94fa1b32096075542d, type: 2}
+  - {fileID: 2100000, guid: 68cbec16dd70bf54eba1636785798b00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -336,11 +337,28 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1248673838509376}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.2, y: 1.1000001, z: 2}
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &114509448177791122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1248673838509376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e74f2c28ca4eeaaf0fe23ae07b2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Popularity: 7
+  RemainingInstances: -1
+  SpawnInLaneA: 1
+  SpawnInLaneB: 1
+  SpawnInLaneC: 1
+  candidate: {fileID: 0}
 --- !u!114 &114606693834223396
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -354,4 +372,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 100
   _time: 0
-  _mult: 0
+  _mult: 1
+  _sizeMultiplier: 8
+  up: {fileID: 0}

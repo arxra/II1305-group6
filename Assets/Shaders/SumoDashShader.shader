@@ -15,8 +15,7 @@
 		LOD 200
 
 		CGPROGRAM
-		#pragma surface surf Standard vertex:vert addshadow
-
+		#pragma surface surf Standard vertex:vert
 		#pragma target 3.0
 
         sampler2D _MainTex;

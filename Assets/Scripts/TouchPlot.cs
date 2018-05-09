@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Android swipe logic
+
 public class TouchPlot {
     public enum SwipeDirection {
         NONE,
@@ -38,6 +40,7 @@ public class TouchPlot {
                 case false: 
                     max = accumulatedSwipeVelocity.x;
 
+				//Checks general direction of swipe
                     if (max < -gestureLengthThreshold)
                         dir = SwipeDirection.LEFT;
                     else if (max > gestureLengthThreshold)

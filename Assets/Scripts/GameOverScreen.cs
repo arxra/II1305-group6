@@ -1,69 +1,88 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class GameOverScreen : MonoBehaviour
 {
 
-    public GameOverManager go;
-    private GameObject[] Obstical;
-    GameObject[] pauseObjects;
-    public bool alive = true;
-    Animator anim;
+  public GameOverManager go;
+  private GameObject[] Obstical;
+  GameObject[] pauseObjects;
+  public bool alive = true;
+  public bool godMode;
+  Animator anim;
+  private float immortalityTimer;
+  public Upgrades ups;
 
-    private WorldMover worldMover;
+  private WorldMover worldMover;
+
+  void Start()
+  {
+    Time.timeScale = 1;
+    pauseObjects = GameObject.FindGameObjectsWithTag("Pause");
+    alive = true;
+    godMode = false;
+    hidePause();
+    worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
+    immortalityTimer = 3.0f;
     
-    void Start()
+    foreach(Upgrades.Upgrade t in ups.CurrentUpgrades())
+      if(t.IsMyName("godmode_timer"))
+        immortalityTimer += t.Level();
+  }
+
+  void Update()
+  {
+    if (Input.GetKeyDown("p"))
     {
-        
+      if (Time.timeScale == 1 && alive == true)
+      {
+        Time.timeScale = 0;
+        showPause();
+      }
+      else if (Time.timeScale == 0 && alive == true)
+      {
         Time.timeScale = 1;
-        pauseObjects = GameObject.FindGameObjectsWithTag("Pause");
-        alive = true;
         hidePause();
-        worldMover = GameObject.Find("WorldMover").GetComponent<WorldMover>();
+      }
 
+      worldMover.IsKill = false;
     }
-
-    void Update()
+  }
+  private void OnCollisionEnter(Collision collision)
+  {
+    if (collision.gameObject.tag.Equals("Obstacle"))
     {
-        if (Input.GetKeyDown("p"))
-        {
-            if (Time.timeScale == 1 && alive == true)
-            {
-                
-                Time.timeScale = 0;
-                showPause();
-            }
-            else if (Time.timeScale == 0 && alive == true)
-            {
-                Time.timeScale = 1;
-                hidePause();
-            }
+      if (!godMode) {
+        alive = false;
+        go.GetComponent<GameOverManager> ().GameOver();
+        worldMover.IsKill = true;
+      } else {
+        unlimitedPower((collision.transform.parent.gameObject));
+      }
+    }
+  }
 
-            worldMover.IsKill = false;
-        }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag.Equals("Obstacle"))
-        {
-            alive = false;
-            go.GetComponent<GameOverManager>().GameOver();
-            worldMover.IsKill = true;
-        }
-    }
+  public void unlimitedPower(GameObject toDestroy) {
+        worldMover.removeFromList(toDestroy);
+    Destroy (toDestroy);
+  }
+
+  public void activateGodMode() {
+    godMode = true;
+    Invoke ("deactivateGodMode", immortalityTimer);
+  }
+  public void deactivateGodMode() {
+    godMode = false;
+  }
 
 
-    public void hidePause()
-    {
-        foreach (GameObject g in pauseObjects)
-            g.SetActive(false);
-    }
-    public void showPause()
-    {
-        foreach (GameObject g in pauseObjects)
-            g.SetActive(true);
-    }
+  public void hidePause()
+  {
+    foreach (GameObject g in pauseObjects)
+      g.SetActive(false);
+  }
+  public void showPause()
+  {
+    foreach (GameObject g in pauseObjects)
+      g.SetActive(true);
+  }
 }

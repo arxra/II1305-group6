@@ -1,95 +1,46 @@
-﻿using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+//Master of spawn policies
+
 public class ObstacleCreator : MonoBehaviour {
-
-	[System.Serializable]
-	public class SpawnSession {
-		[Tooltip("A pointer to the candidate gameobject you want to override the spawn settings for")]
-		public GameObject Candidate;
-		
-		[Tooltip("An indicator to how often this gameobject should spawn in relation to other candidates")]
-		public int Popularity;
-
-		[Tooltip("The number of remaining instances this candidate should spawn (-1 means infinity)")]
-		public int RemainingInstances;
-
-		[Tooltip("A list of lanes you don't want this candidate to spawn in")]
-		public List<int> ExcludeLanes;
-
-		public SpawnSession(GameObject candidate, int popularity = 10, int remainingInstances = -1) {
-			Candidate = candidate;
-			Popularity = popularity;
-			RemainingInstances = remainingInstances; 
-			ExcludeLanes = new List<int>();
-		}
-
-		public bool InstantiateAt(Vector3 position) {
-			if (RemainingInstances == 0)
-				return false;
-			else if(RemainingInstances > 0)
-				RemainingInstances--;
-
-			Object.Instantiate(Candidate, position, Candidate.transform.rotation);
-			return true;
-		}
-
-		public Vector3 GetSuitableSpawnPoint(Transform spawnPoints, ref int lastLane) {
-			ExcludeLanes.Add(lastLane);
-			var range = Enumerable.Range(0, spawnPoints.childCount).Where(v => !ExcludeLanes.Contains(v));
-			ExcludeLanes.Remove(lastLane);
-
-			if (range.Any()){
-				lastLane = range.ElementAt(Random.Range(0, range.Count()));
-
-				return (
-					spawnPoints.GetChild(lastLane).position + 
-					Vector3.up * Candidate.transform.position.y
-				);
-			}
-			else
-				throw new UnityException("You fucked up! Too many excluded lanes :(");
-		}
-	} 
-
 	[Tooltip("The time between each obstacle spawn [seconds]")]
 	public float AutoSpawnInterval = 1;
-	
-	[Tooltip("Overrides the default spawn settings for a candidate")]
-	public List<SpawnSession> SpawnOverrides = new List<SpawnSession>();
+
+	private List<SpawnPolicy> policies;
+  public WorldMover mw;
 
 	private int totalPopularity;
 	private float timeout;
 	private int lastLane;
 
-	public ObstacleCreator() {
-		SpawnOverrides = new List<SpawnSession>() {
-			new SpawnSession(null)
-		};
-	}
-
-	// Use this for initialization
 	void Start () {
+		policies = new List<SpawnPolicy>();
 		timeout = AutoSpawnInterval;	
-		totalPopularity = 0;	
-		lastLane = -1;
+		totalPopularity = 0;
+		lastLane = 1;
 
-		foreach(Transform transf in transform.Find("Candidates")) {
-			var session = SpawnOverrides.Find(s => s.Candidate.Equals(transf.gameObject));
-			
-			if (session == null) {
-				session = new SpawnSession(transf.gameObject);
-				SpawnOverrides.Add(session);
+		//Scan candidates
+		foreach(Transform transf in transform.Find("Candidates").transform) {
+			SpawnPolicy policy = transf.GetComponent<SpawnPolicy>();
+
+			//Create default value if none preexisting 
+			if (policy == null){
+				transf.gameObject.AddComponent(typeof(SpawnPolicy));
+				policy = transf.GetComponent<SpawnPolicy>();
 			}
 
-			totalPopularity += session.Popularity;
+			totalPopularity += policy.Popularity;
+			policies.Add(policy);
 		}
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
+    //Spawn Interval depends on WorldMover Speed.
+    AutoSpawnInterval = 40/mw.currentSpeed;
+
+		//Sets continuous spawning intervals
 		if (timeout > 0) {
 			timeout -= Time.deltaTime;
 			return;
@@ -97,28 +48,49 @@ public class ObstacleCreator : MonoBehaviour {
 		else
 			timeout = AutoSpawnInterval;
 
-		var session = SpawnNow();
-		if (session != null){
-			if (session.Candidate == null || !session.InstantiateAt(session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane))){
-				SpawnOverrides.Remove(session);
-				totalPopularity -= session.Popularity;
+		//Check if spawned to spawn 
+		bool hasSpawned = false;
+		SpawnPolicy session;
+		Vector3 suitableSpawnPoint;
+
+		while(!hasSpawned) {
+			session = SpawnNow();
+			
+			if (session != null){
+				GameObject spawnClone = null;
+
+				suitableSpawnPoint = session.GetSuitableSpawnPoint(transform.Find("Spawn Points"), ref lastLane);
+				hasSpawned = session.InstantiateAt(suitableSpawnPoint, ref spawnClone);
+
+				if (hasSpawned)
+					mw.addToList (spawnClone);
+
+				if (!hasSpawned && suitableSpawnPoint != Vector3.zero){
+					// Stop spawning this object
+					policies.Remove(session);
+					totalPopularity -= session.Popularity;
+				}
 			}
-		}
-		else {
-			Debug.LogWarning("ObstacleCreator: Disabling since there are no more obstacles left to spawn. Is this intentional?");
-			enabled = false;
+			else {
+				Debug.LogWarning("ObstacleCreator: Disabling since there are no more obstacles left to spawn. Is this intentional?");
+				enabled = false;
+				return;
+			}
 		}
 	}
 
-	public SpawnSession SpawnNow() {
+	//Returns a randomly selected gameobject to spawn 
+	public SpawnPolicy SpawnNow() {
 		int rand = Random.Range(0, totalPopularity);
 		int pos = 0;
 
-		foreach(SpawnSession session in SpawnOverrides) {
-			if (rand >= pos & rand < (pos += session.Popularity))
-				return session;
+		foreach(SpawnPolicy policy in policies) {
+			if (rand >= pos & rand < (pos += policy.Popularity)) {
+				return policy;
+			}
 		}
 
 		return null;
 	}
+
 }

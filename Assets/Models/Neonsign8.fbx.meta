@@ -1,0 +1,222 @@
+fileFormatVersion: 2
+guid: 7ec8ed78562fd45c8975024d4be1aec1
+timeCreated: 1525701402
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Camera
+    100002: Circle
+    100004: Circle.002
+    100006: Cube
+    100008: Cube.001
+    100010: Cube.002
+    100012: Cube.003
+    100014: Cube.004
+    100016: Lamp
+    100018: //RootNode
+    100020: Plane
+    100022: Plane.001
+    100024: Plane.002
+    100026: Plane.003
+    100028: Plane.004
+    100030: Plane.005
+    100032: Plane.006
+    100034: Plane.007
+    100036: Plane.008
+    100038: Plane.009
+    100040: Plane.010
+    100042: Plane.011
+    100044: Plane.012
+    100046: Plane.013
+    100048: Text
+    100050: Text.000
+    100052: Text.001
+    100054: Text.002
+    400000: Camera
+    400002: Circle
+    400004: Circle.002
+    400006: Cube
+    400008: Cube.001
+    400010: Cube.002
+    400012: Cube.003
+    400014: Cube.004
+    400016: Lamp
+    400018: //RootNode
+    400020: Plane
+    400022: Plane.001
+    400024: Plane.002
+    400026: Plane.003
+    400028: Plane.004
+    400030: Plane.005
+    400032: Plane.006
+    400034: Plane.007
+    400036: Plane.008
+    400038: Plane.009
+    400040: Plane.010
+    400042: Plane.011
+    400044: Plane.012
+    400046: Plane.013
+    400048: Text
+    400050: Text.000
+    400052: Text.001
+    400054: Text.002
+    2000000: Camera
+    2100000: No Name
+    2100002: Material
+    2300000: Circle
+    2300002: Circle.002
+    2300004: Cube
+    2300006: Cube.001
+    2300008: Cube.002
+    2300010: Cube.003
+    2300012: Cube.004
+    2300014: Plane
+    2300016: Plane.001
+    2300018: Plane.002
+    2300020: Plane.003
+    2300022: Plane.004
+    2300024: Plane.005
+    2300026: Plane.006
+    2300028: Plane.007
+    2300030: Plane.008
+    2300032: Plane.009
+    2300034: Plane.010
+    2300036: Plane.011
+    2300038: Plane.012
+    2300040: Plane.013
+    2300042: Text
+    2300044: Text.000
+    2300046: Text.001
+    2300048: Text.002
+    3300000: Circle
+    3300002: Circle.002
+    3300004: Cube
+    3300006: Cube.001
+    3300008: Cube.002
+    3300010: Cube.003
+    3300012: Cube.004
+    3300014: Plane
+    3300016: Plane.001
+    3300018: Plane.002
+    3300020: Plane.003
+    3300022: Plane.004
+    3300024: Plane.005
+    3300026: Plane.006
+    3300028: Plane.007
+    3300030: Plane.008
+    3300032: Plane.009
+    3300034: Plane.010
+    3300036: Plane.011
+    3300038: Plane.012
+    3300040: Plane.013
+    3300042: Text
+    3300044: Text.000
+    3300046: Text.001
+    3300048: Text.002
+    4300000: Cube.004
+    4300002: Cube.003
+    4300004: Cube.002
+    4300006: Cube.001
+    4300008: Circle.002
+    4300010: Circle
+    4300012: Plane.013
+    4300014: Plane.012
+    4300016: Plane.011
+    4300018: Plane.010
+    4300020: Plane.006
+    4300022: Plane.004
+    4300024: Text.001
+    4300026: Text
+    4300028: Text.000
+    4300030: Plane.009
+    4300032: Plane.008
+    4300034: Plane.007
+    4300036: Plane.005
+    4300038: Text.002
+    4300040: Plane.003
+    4300042: Plane.002
+    4300044: Plane.001
+    4300046: Plane
+    4300048: Cube
+    10800000: Lamp
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
