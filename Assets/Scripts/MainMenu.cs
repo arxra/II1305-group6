@@ -50,15 +50,19 @@ public class MainMenu : MonoBehaviour {
 		Application.Quit ();
 	}
 
-	public void Upgrades() {
-		upgradesAnim.SetTrigger("UpgradesPressed");
-		abortUpgrades.SetActive(true);
+  public void UpgradePrices() {
 		foreach(Upgrades.Upgrade u in upgradesScript.CurrentUpgrades()) {
 			var upgradeGO = upgrades.transform.Find(u.Name());
 			
 			if (upgradeGO != null)
 				upgradeGO.Find("Price").GetComponent<Text>().text = u.Cost() + ":-";
 		}
+  }
+
+	public void Upgrades() {
+		upgradesAnim.SetTrigger("UpgradesPressed");
+		abortUpgrades.SetActive(true);
+    UpgradePrices();
 		
 	}
 
@@ -77,6 +81,7 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void Update() {
+    UpgradePrices();
 		if (playedPressed) {
 			screenFadeTimer -= Time.deltaTime;
 

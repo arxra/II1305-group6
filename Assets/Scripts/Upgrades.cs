@@ -26,6 +26,8 @@ public class Upgrades : MonoBehaviour {
     foreach (string up in _ups){
       _ownedUpgrades.Add(new Upgrade(up, this));
     }
+    foreach(Upgrade t in CurrentUpgrades())
+      Debug.Log(t.Name());
   }
 
 
